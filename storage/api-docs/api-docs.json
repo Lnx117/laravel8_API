@@ -1,0 +1,369 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "OpenApi Documentation",
+        "description": "Документация для API заявок ремонтной мастерской",
+        "contact": {
+            "email": null
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Основной API"
+        },
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Для Логирования"
+        }
+    ],
+    "paths": {
+        "/api/sanctum/register": {
+            "post": {
+                "tags": [
+                    "Регистрация и авторизация"
+                ],
+                "summary": "Регистрация нового пользователя",
+                "description": "Регистрация нового пользователя с использованием имени, адреса электронной почты и пароля",
+                "operationId": "0f4a9954a4d1a5297af4380586b1039e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "JWT токен",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Ошибка валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Сообщения об ошибках валидации",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sanctum/token": {
+            "post": {
+                "tags": [
+                    "Регистрация и авторизация"
+                ],
+                "summary": "Авторизация и получение токена",
+                "description": "Авторизует пользователя по email и паролю и возвращает токен доступа.",
+                "operationId": "51a1a1f07514f6e10815a5bc80d4de0a",
+                "requestBody": {
+                    "description": "Данные для авторизации",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "ivan@yandex.ru"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная авторизация. Возвращает токен доступа",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|hashvalue"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Ошибка авторизации. Возвращает ошибку валидации или сообщение об ошибке в случае неверных учетных данных.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "example": {
+                                                "email": [
+                                                    "The email field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sanctum/getUsersList": {
+            "get": {
+                "tags": [
+                    "Пользователи"
+                ],
+                "summary": "Получение списка пользователей",
+                "description": "Возвращает список всех зарегистрированных пользователей.",
+                "operationId": "25b44080ab77afcf007304a7ae3e2e7f",
+                "responses": {
+                    "200": {
+                        "description": "Список пользователей",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RegisterRequest"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован. Токен доступа отсутствует или недействителен."
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Application": {
+                "title": "Applications",
+                "description": "Applications model",
+                "properties": {
+                    "id": {
+                        "title": "Application ID",
+                        "description": "Application ID",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "customer_id": {
+                        "title": "Customer ID",
+                        "description": "Customer ID",
+                        "type": "string",
+                        "format": "string",
+                        "example": 1
+                    },
+                    "customer_first_name": {
+                        "title": "Customer first name",
+                        "description": "Customer first name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Vlad"
+                    },
+                    "customer_last_name": {
+                        "title": "Customer lst name",
+                        "description": "Customer lst name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Ostryakov"
+                    },
+                    "customer_patronymic": {
+                        "title": "Customer patronymic",
+                        "description": "Customer patronymic",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Pavlovich"
+                    },
+                    "customer_phone": {
+                        "title": "Customer phone",
+                        "description": "Customer phone",
+                        "type": "string",
+                        "format": "string",
+                        "example": "+79128539823"
+                    },
+                    "app_city": {
+                        "title": "Application city name",
+                        "description": "Application city name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Moskow"
+                    },
+                    "app_street": {
+                        "title": "Application srteet name",
+                        "description": "Application srteet name",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Polyani"
+                    },
+                    "app_house_number": {
+                        "title": "Application house number",
+                        "description": "Application house number",
+                        "type": "string",
+                        "format": "string",
+                        "example": "9"
+                    },
+                    "app_house_building": {
+                        "title": "Application house building number (corp)",
+                        "description": "Application house building number",
+                        "type": "string",
+                        "format": "string",
+                        "example": "12"
+                    },
+                    "app_flat_num": {
+                        "title": "Application house flat number",
+                        "description": "Application house flat number",
+                        "type": "string",
+                        "format": "string",
+                        "example": "912"
+                    },
+                    "app_floor_num": {
+                        "title": "Application house floor number",
+                        "description": "Application house floor number",
+                        "type": "string",
+                        "format": "string",
+                        "example": "1"
+                    },
+                    "app_house_entrance": {
+                        "title": "Application house entrance number",
+                        "description": "Application house entrance number",
+                        "type": "string",
+                        "format": "string",
+                        "example": "90"
+                    },
+                    "app_created_at": {
+                        "title": "Application created at",
+                        "description": "Application created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2023-02-14 13:45:30"
+                    },
+                    "app_to_execute_at": {
+                        "title": "Application must been execute at",
+                        "description": "Application must been execute at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2023-02-14 13:45:30"
+                    },
+                    "master_id": {
+                        "title": "Master id",
+                        "description": "Master id",
+                        "type": "string",
+                        "format": "string",
+                        "example": "23"
+                    },
+                    "app_status": {
+                        "title": "Application status",
+                        "description": "Application status. Application status must be: ....",
+                        "type": "string",
+                        "format": "string",
+                        "example": "In progress"
+                    },
+                    "created_at": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2023-02-14 13:45:30"
+                    },
+                    "updated_at": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2023-02-14 13:45:30"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Applications"
+                }
+            },
+            "RegisterRequest": {
+                "title": "Регистрация нового пользователя",
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Имя пользователя",
+                        "type": "string",
+                        "example": "Ivan"
+                    },
+                    "email": {
+                        "description": "Адрес электронной почты",
+                        "type": "string",
+                        "format": "email",
+                        "example": "ivan@yandex.ru"
+                    },
+                    "password": {
+                        "description": "Пароль пользователя (не менее 8 символов)",
+                        "type": "string",
+                        "format": "password",
+                        "example": "12345678"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "apiAuth": {
+                "type": "http",
+                "description": "Login with email and password to get the authentication token",
+                "name": "Token based Based",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            },
+            "0": []
+        }
+    }
+}
