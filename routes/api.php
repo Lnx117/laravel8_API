@@ -8,6 +8,10 @@ use App\Http\Controllers\Users\UserController;
 
 use App\Http\Controllers\AppController;
 
+
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,7 +32,9 @@ Route::prefix('sanctum')->namespace('Auth')->group(function() {
 
 Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('Users')->group(function() {
     Route::get('getUsersList', [UserController::class, 'getUsersList']);
-    
+    Route::put('updateUserByIdOrEmail/{user}', [UserController::class, 'updateUserByIdOrEmail']);
+    Route::get('getUserByIdOrEmail/{user}', [UserController::class, 'getUserByIdOrEmail']);
+    Route::delete('deleteUserByIdOrEmail/{user}', [UserController::class, 'deleteUserByIdOrEmail']);
    /*  Update, delete by id or email
     Route::get('getUsersList', [UserController::class, 'getUsersList']);
     Route::get('getUsersList', [UserController::class, 'getUsersList']);
@@ -40,9 +46,12 @@ Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('Users')->group(
 
 });
 
+// Route to reset password
+Route::post('reset-password', function (Request $request) {
+    $status = Password::sendResetLink(['email' => 'vlados117@gmail.com']);
+    $x = Hash::make('19960620v');
+    $y = Hash::make('adminadmin');
 
-Route::middleware('auth:sanctum')->get('/name', function (Request $request) {
-    return response()->json(['name' => $request->user()->name]);
+    return response()->json(1);
+
 });
-
-Route::get('/test', [AppController::class, 'test']);

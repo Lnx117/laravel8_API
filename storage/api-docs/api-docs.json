@@ -4,7 +4,7 @@
         "title": "OpenApi Documentation",
         "description": "Документация для API заявок ремонтной мастерской",
         "contact": {
-            "email": null
+            "email": "cgptvlados117@gmail.com"
         },
         "version": "1.0.0"
     },
@@ -171,6 +171,130 @@
                     },
                     "401": {
                         "description": "Не авторизован. Токен доступа отсутствует или недействителен."
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/updateUserByIdOrEmail/{user}": {
+            "put": {
+                "tags": [
+                    "Пользователи"
+                ],
+                "summary": "Update user by ID or email",
+                "description": "Меняет данные пользователя по его Id или Email",
+                "operationId": "d3b20a7288687a24ac7180f57dfe1d50",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "User ID or email",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "User name",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/getUserByIdOrEmail/{user}": {
+            "get": {
+                "tags": [
+                    "Пользователи"
+                ],
+                "summary": "Get user by ID or email",
+                "description": "Получает конкретного пользователя по ID или email",
+                "operationId": "c7ebee6caac3ab4c1673e28bb06f841b",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "User ID or email",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User founded successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/deleteUserByIdOrEmail/{user}": {
+            "delete": {
+                "tags": [
+                    "Пользователи"
+                ],
+                "summary": "Delete user by ID or email",
+                "description": "Удаляет конкретного пользователя по ID или email",
+                "operationId": "e766dc26fab7e4e9b4b3391c7439058f",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "User ID or email",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 },
                 "security": [
