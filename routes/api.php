@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Task\TaskController;
 
 use App\Http\Controllers\AppController;
 
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 
+//Register and auth
 Route::prefix('sanctum')->namespace('Auth')->group(function() {
     //create user
     Route::post('register', [AuthController::class, 'register']);
@@ -30,20 +32,21 @@ Route::prefix('sanctum')->namespace('Auth')->group(function() {
     Route::post('token', [AuthController::class, 'token']);
 });
 
+//Work with users (employes)
 Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('Users')->group(function() {
     Route::get('getUsersList', [UserController::class, 'getUsersList']);
     Route::put('updateUserByIdOrEmail/{user}', [UserController::class, 'updateUserByIdOrEmail']);
     Route::get('getUserByIdOrEmail/{user}', [UserController::class, 'getUserByIdOrEmail']);
     Route::delete('deleteUserByIdOrEmail/{user}', [UserController::class, 'deleteUserByIdOrEmail']);
-   /*  Update, delete by id or email
-    Route::get('getUsersList', [UserController::class, 'getUsersList']);
-    Route::get('getUsersList', [UserController::class, 'getUsersList']);
-    Route::get('getUsersList', [UserController::class, 'getUsersList']); */
+});
 
-    /* Change email and change pass
-    Route::get('getUsersList', [UserController::class, 'getUsersList']); 
-    Route::get('getUsersList', [UserController::class, 'getUsersList']);*/
-
+//Work with tasks
+Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('task')->group(function() {
+    Route::get('createTask/{application_id}/{master_id}/{status}', [TaskController::class, 'createTask']);
+    Route::get('getTasksList', [TaskController::class, 'getTasksList']);
+    Route::put('updateTaskById/{id}', [TaskController::class, 'updateTaskById']);
+    Route::get('getTaskById/{id}', [TaskController::class, 'getTaskById']);
+    Route::delete('deleteTaskById/{id}', [TaskController::class, 'deleteTaskById']);
 });
 
 // Route to reset password

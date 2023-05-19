@@ -15,7 +15,7 @@ class CreateApplicationsTable extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->string('customer_id');
+            $table->string('bitrix_customer_id');
             $table->string('customer_first_name');
             $table->string('customer_last_name');
             $table->string('customer_patronymic');
@@ -29,6 +29,7 @@ class CreateApplicationsTable extends Migration
             $table->string('app_house_entrance');
             $table->dateTime('app_created_at', $precision = 0);
             $table->dateTime('app_to_execute_at', $precision = 0);
+            $table->string('problem_text');
             $table->string('master_id');
             $table->string('app_status');
             $table->timestamps();

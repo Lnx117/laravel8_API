@@ -147,6 +147,220 @@
                 }
             }
         },
+        "/api/sanctum/getTasksList": {
+            "get": {
+                "tags": [
+                    "Задачи"
+                ],
+                "summary": "Получение списка задач",
+                "description": "Возвращает список всех задач.",
+                "operationId": "9eeefb9a3c536abed885809ec76f499c",
+                "responses": {
+                    "200": {
+                        "description": "Список задач",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RegisterRequest"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован. Токен доступа отсутствует или недействителен."
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/updateTaskById/{id}": {
+            "put": {
+                "tags": [
+                    "Задачи"
+                ],
+                "summary": "Update task by ID",
+                "description": "Меняет задачу по ее Id",
+                "operationId": "ec3b0e30aee8e629afd2701b41197a26",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "application_id": {
+                                        "description": "Task application_id",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "master_id": {
+                                        "description": "Task master_id",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "status": {
+                                        "description": "Task status",
+                                        "type": "string",
+                                        "example": "Принято"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task updated successfully"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/getTaskById/{id}": {
+            "get": {
+                "tags": [
+                    "Задачи"
+                ],
+                "summary": "Get task by ID",
+                "description": "Получает задачу по ID",
+                "operationId": "5016fa9b0e692f26a993004a4dbaba88",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task founded successfully"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/deleteTaskById/{id}": {
+            "delete": {
+                "tags": [
+                    "Задачи"
+                ],
+                "summary": "Delete task by ID",
+                "description": "Удаляет задачу по ID",
+                "operationId": "786195f6b6416f76a9b9c473eefa0832",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task deleted successfully"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/createTask/{application_id}/{master_id}/{status}": {
+            "get": {
+                "tags": [
+                    "Задачи"
+                ],
+                "summary": "Create task",
+                "description": "Меняет задачу по ее Id",
+                "operationId": "ec74292f512d858b5b2382f7c4dc0685",
+                "parameters": [
+                    {
+                        "name": "application_id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "master_id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task created successfully"
+                    },
+                    "404": {
+                        "description": "Task not created"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/sanctum/getUsersList": {
             "get": {
                 "tags": [

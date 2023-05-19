@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    protected $response = [
+        'status' => '',
+        'message' => '',
+        'data' => '',
+    ];
 /**
  * @OA\Get(
  *     path="/api/sanctum/getUsersList",
@@ -33,7 +39,15 @@ class UserController extends Controller
  */
     public function getUsersList()
     {
-        return User::all();
+        //Получаем статусы ответа
+        $statuses = config('ApiStatus');
+
+        //Получаем список рользователей
+        $this->response['data'] = User::all();
+        $this->response['message'] = 'All users list';
+        $this->response['status'] = $statuses['ok'];
+
+        return $this->response;
     }
 
 /**
@@ -85,6 +99,9 @@ class UserController extends Controller
  */
     public function updateUserByIdOrEmail(Request $request, $user)
     {
+        //Получаем статусы ответа
+        $statuses = config('ApiStatus');
+
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($user)) {
             $user = User::find($user);
@@ -93,6 +110,12 @@ class UserController extends Controller
             $user = User::where('email', $user)->firstOrFail();
         }
 
+        if (!$user) {
+            $this->response['message'] = 'User not found';
+            $this->response['status'] = $statuses['warning'];
+    
+            return $this->response;
+        }
         // заполняем модель только теми полями, которые пришли в запросе
         // пока обновляем либо имя, либо пароль
         $user->fill($request->only([
@@ -104,8 +127,11 @@ class UserController extends Controller
         $user->save();
 
         $user = User::find($user);
+        $this->response['data'] = $user;
+        $this->response['message'] = 'User updated successfully';
+        $this->response['status'] = $statuses['ok'];
 
-        return response()->json(['message' => 'User updated successfully']);
+        return $this->response;
     }
 
 /**
@@ -134,8 +160,12 @@ class UserController extends Controller
  *      )
  * )
  */
-    public function getUserByIdOrEmail(Request $request, $idOrEmail)
+    public function getUserByIdOrEmail($idOrEmail)
     {
+
+        //Получаем статусы ответа
+        $statuses = config('ApiStatus');
+
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($idOrEmail)) {
             $user = User::find($idOrEmail);
@@ -144,8 +174,18 @@ class UserController extends Controller
             $user = User::where('email', $idOrEmail)->firstOrFail();
         }
 
-        if (empty($user)) return response()->json(['message' => 'User not found']);
-        return response()->json($user);
+        if (!$user) {
+            $this->response['message'] = 'User not found';
+            $this->response['status'] = $statuses['warning'];
+    
+            return $this->response;
+        }
+
+        $this->response['data'] = $user;
+        $this->response['message'] = 'User founded successfully';
+        $this->response['status'] = $statuses['ok'];
+
+        return $this->response;
     }
 
     /**
@@ -174,8 +214,11 @@ class UserController extends Controller
      *      )
      * )
      */
-    public function deleteUserByIdOrEmail(Request $request, $idOrEmail)
+    public function deleteUserByIdOrEmail($idOrEmail)
     {
+        //Получаем статусы ответа
+        $statuses = config('ApiStatus');
+
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($idOrEmail)) {
             $user = User::find($idOrEmail);
@@ -183,9 +226,27 @@ class UserController extends Controller
             // в противном случае ищем пользователя по email
             $user = User::where('email', $idOrEmail)->firstOrFail();
         }
-        if (empty($user)) return response()->json(['message' => 'User not found']);
+
+        if (!$user) {
+            $this->response['message'] = 'User not found';
+            $this->response['status'] = $statuses['warning'];
+    
+            return $this->response;
+        }
+
         $user = $user->delete();
-        if ($user != true) return response()->json(['message' => 'User not deleted']);
-        return response()->json($user);
+
+        if ($user != true) {
+            $this->response['message'] = 'User not deleted';
+            $this->response['status'] = $statuses['warning'];
+    
+            return $this->response;
+        }
+
+        $this->response['data'] = $user;
+        $this->response['message'] = 'User deleted successfully';
+        $this->response['status'] = $statuses['ok'];
+
+        return $this->response;
     }
 }
