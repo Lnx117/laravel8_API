@@ -19,6 +19,338 @@
         }
     ],
     "paths": {
+        "/api/sanctum/getApplicationsList": {
+            "get": {
+                "tags": [
+                    "Заявки"
+                ],
+                "summary": "Получение списка заявок",
+                "description": "Возвращает список всех заявок.",
+                "operationId": "81e31e182d1331a6a9b25cf6ad6db59a",
+                "responses": {
+                    "200": {
+                        "description": "Список заявок",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RegisterRequest"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован. Токен доступа отсутствует или недействителен."
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/updateApplicationById/{id}": {
+            "put": {
+                "tags": [
+                    "Заявки"
+                ],
+                "summary": "Update app by ID",
+                "description": "Меняет заявку по ее Id",
+                "operationId": "6628e9fba54c570128c4d8b5d04219f6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "App ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "bitrix_customer_id": {
+                                        "description": "bitrix_customer_id name",
+                                        "type": "string",
+                                        "example": "1221321"
+                                    },
+                                    "customer_first_name": {
+                                        "description": "customer_first_name",
+                                        "type": "string",
+                                        "example": "Владислав"
+                                    },
+                                    "customer_last_name": {
+                                        "description": "customer_last_name",
+                                        "type": "string",
+                                        "example": "Остряков"
+                                    },
+                                    "customer_patronymic": {
+                                        "description": "customer_patronymic",
+                                        "type": "string",
+                                        "example": "Павлович"
+                                    },
+                                    "customer_phone": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "+79128539823"
+                                    },
+                                    "app_city": {
+                                        "description": "app_city",
+                                        "type": "string",
+                                        "example": "Москва"
+                                    },
+                                    "app_street": {
+                                        "description": "app_street",
+                                        "type": "string",
+                                        "example": "Поляны"
+                                    },
+                                    "app_house_number": {
+                                        "description": "app_house_number",
+                                        "type": "string",
+                                        "example": "45"
+                                    },
+                                    "app_house_building": {
+                                        "description": "app_house_building",
+                                        "type": "string",
+                                        "example": "-"
+                                    },
+                                    "app_flat_num": {
+                                        "description": "app_flat_num",
+                                        "type": "string",
+                                        "example": "3598"
+                                    },
+                                    "app_floor_num": {
+                                        "description": "app_floor_num",
+                                        "type": "string",
+                                        "example": "32"
+                                    },
+                                    "app_house_entrance": {
+                                        "description": "app_house_entrance",
+                                        "type": "string",
+                                        "example": "цу"
+                                    },
+                                    "problem_text": {
+                                        "description": "problem_text",
+                                        "type": "string",
+                                        "example": "Все оки)"
+                                    },
+                                    "master_id": {
+                                        "description": "master_id",
+                                        "type": "string",
+                                        "example": "332"
+                                    },
+                                    "app_status": {
+                                        "description": "app_status",
+                                        "type": "string",
+                                        "example": "Принято"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task updated successfully"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/getApplicationById/{id}": {
+            "get": {
+                "tags": [
+                    "Заявки"
+                ],
+                "summary": "Get app by ID",
+                "description": "Получает заявку по ID",
+                "operationId": "8475e36ac518e64f646e422dcf36e945",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "App ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "App founded successfully"
+                    },
+                    "404": {
+                        "description": "App not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/deleteApplicationById/{id}": {
+            "delete": {
+                "tags": [
+                    "Заявку"
+                ],
+                "summary": "Delete app by ID",
+                "description": "Удаляет заявку по ID",
+                "operationId": "04ea11831b6a7367b3698d247d79d4b8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "App ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "App deleted successfully"
+                    },
+                    "404": {
+                        "description": "App not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sanctum/createApplication": {
+            "put": {
+                "tags": [
+                    "Заявки"
+                ],
+                "summary": "Create task",
+                "description": "Создает заявку",
+                "operationId": "7a33bb533f4fdace265c749e0afeee78",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "bitrix_customer_id": {
+                                        "description": "bitrix_customer_id name",
+                                        "type": "string",
+                                        "example": "1221321"
+                                    },
+                                    "customer_first_name": {
+                                        "description": "customer_first_name",
+                                        "type": "string",
+                                        "example": "Владислав"
+                                    },
+                                    "customer_last_name": {
+                                        "description": "customer_last_name",
+                                        "type": "string",
+                                        "example": "Остряков"
+                                    },
+                                    "customer_patronymic": {
+                                        "description": "customer_patronymic",
+                                        "type": "string",
+                                        "example": "Павлович"
+                                    },
+                                    "customer_phone": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "+79128539823"
+                                    },
+                                    "app_city": {
+                                        "description": "app_city",
+                                        "type": "string",
+                                        "example": "Москва"
+                                    },
+                                    "app_street": {
+                                        "description": "app_street",
+                                        "type": "string",
+                                        "example": "Поляны"
+                                    },
+                                    "app_house_number": {
+                                        "description": "app_house_number",
+                                        "type": "string",
+                                        "example": "45"
+                                    },
+                                    "app_house_building": {
+                                        "description": "app_house_building",
+                                        "type": "string",
+                                        "example": "-"
+                                    },
+                                    "app_flat_num": {
+                                        "description": "app_flat_num",
+                                        "type": "string",
+                                        "example": "3598"
+                                    },
+                                    "app_floor_num": {
+                                        "description": "app_floor_num",
+                                        "type": "string",
+                                        "example": "32"
+                                    },
+                                    "app_house_entrance": {
+                                        "description": "app_house_entrance",
+                                        "type": "string",
+                                        "example": "цу"
+                                    },
+                                    "problem_text": {
+                                        "description": "problem_text",
+                                        "type": "string",
+                                        "example": "Все оки)"
+                                    },
+                                    "master_id": {
+                                        "description": "master_id",
+                                        "type": "string",
+                                        "example": "332"
+                                    },
+                                    "app_status": {
+                                        "description": "app_status",
+                                        "type": "string",
+                                        "example": "Принято"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task created successfully"
+                    },
+                    "404": {
+                        "description": "Task not created"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/sanctum/register": {
             "post": {
                 "tags": [
@@ -321,7 +653,7 @@
                     {
                         "name": "application_id",
                         "in": "path",
-                        "description": "Task ID",
+                        "description": "application_id",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -330,7 +662,7 @@
                     {
                         "name": "master_id",
                         "in": "path",
-                        "description": "Task ID",
+                        "description": "master_id",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -339,7 +671,7 @@
                     {
                         "name": "status",
                         "in": "path",
-                        "description": "Task ID",
+                        "description": "status",
                         "required": true,
                         "schema": {
                             "type": "string"

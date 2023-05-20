@@ -2,12 +2,14 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Task\TaskController;
+use App\Http\Controllers\Applications\ApplicationsController;
 
-use App\Http\Controllers\AppController;
+// use App\Http\Controllers\AppController;
 
 
 use Illuminate\Auth\Events\PasswordReset;
@@ -47,6 +49,15 @@ Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('task')->group(f
     Route::put('updateTaskById/{id}', [TaskController::class, 'updateTaskById']);
     Route::get('getTaskById/{id}', [TaskController::class, 'getTaskById']);
     Route::delete('deleteTaskById/{id}', [TaskController::class, 'deleteTaskById']);
+});
+
+//Work with applications
+Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('applications')->group(function() {
+    Route::put('createApplication', [ApplicationsController::class, 'createApplication']);
+    Route::get('getApplicationsList', [ApplicationsController::class, 'getApplicationsList']);
+    Route::put('updateApplicationById/{id}', [ApplicationsController::class, 'updateApplicationById']);
+    Route::get('getApplicationById/{id}', [ApplicationsController::class, 'getApplicationById']);
+    Route::delete('deleteApplicationById/{id}', [ApplicationsController::class, 'deleteApplicationById']);
 });
 
 // Route to reset password

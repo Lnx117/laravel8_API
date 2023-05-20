@@ -29,6 +29,6 @@ class TasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applications');
+        Schema::dropIfExists('tasks_table');
     }
 }

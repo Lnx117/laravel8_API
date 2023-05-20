@@ -27,8 +27,8 @@ class CreateApplicationsTable extends Migration
             $table->string('app_flat_num');
             $table->string('app_floor_num');
             $table->string('app_house_entrance');
-            $table->dateTime('app_created_at', $precision = 0);
-            $table->dateTime('app_to_execute_at', $precision = 0);
+            $table->dateTime('app_created_at', $precision = 0)->default(now());
+            $table->dateTime('app_to_execute_at', $precision = 0)->default(now()->addDays(3));
             $table->string('problem_text');
             $table->string('master_id');
             $table->string('app_status');
