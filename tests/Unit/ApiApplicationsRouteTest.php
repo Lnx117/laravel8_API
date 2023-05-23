@@ -27,7 +27,9 @@ class ApiApplicationsRouteTest extends TestCase
         $statuses = config('ApiStatus');
 
         //Создает юзера по модели User
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
         
         //Использует юзера, не использует явную авторизацию с токенами как в реале, а  юзает временные CSRF токены
         $response = $this->actingAs($this->user, 'sanctum')
@@ -45,7 +47,9 @@ class ApiApplicationsRouteTest extends TestCase
     public function testUpdateApplicationById()
     {
         // Используем старого юзера из свойства protected $user;
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
 
         //$this->app = Applications::factory()->create();
         $app = Applications::factory()->create();
@@ -83,7 +87,9 @@ class ApiApplicationsRouteTest extends TestCase
     {
         $statuses = config('ApiStatus');
         // Создаем тестового пользователя
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
 
         $app = Applications::factory()->create();
 
@@ -111,7 +117,9 @@ class ApiApplicationsRouteTest extends TestCase
         $statuses = config('ApiStatus');
 
         // Создаем тестового пользователя
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
 
         $app = Applications::factory()->create();
 
@@ -137,7 +145,9 @@ class ApiApplicationsRouteTest extends TestCase
         $statuses = config('ApiStatus');
 
         // Создаем тестового пользователя
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
 
         // Создаем фейковые данные для запроса
         $data = [
@@ -160,7 +170,7 @@ class ApiApplicationsRouteTest extends TestCase
 
         // Вызываем метод с идентификатором пользователя
         $response = $this->actingAs($this->user, 'sanctum')
-            ->put("api/sanctum/createApplication/", $data);
+            ->post("api/sanctum/createApplication/", $data);
         // Проверяем успешный статус ответа
         $response->assertStatus(200);
 

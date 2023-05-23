@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    protected $response = [
+        'status' => '',
+        'message' => '',
+        'data' => '',
+    ];
+
     /**
      * @OA\Post(
      *     path="/api/sanctum/register",
@@ -38,6 +44,8 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     { 
+        $statuses = config('ApiStatus');
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -58,9 +66,73 @@ class AuthController extends Controller
         $token = $user->createToken('token-name')->plainTextToken;
 
         
-        return response()->json(['token' => $token], 200);
+        $this->response['data'] = $token;
+        $this->response['message'] = 'New user token';
+        $this->response['status'] = $statuses['ok'];
+
+        return $this->response;
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/sanctum/registerManager",
+     *     summary="Регистрация менеджера",
+     *     description="Регистрация нового менеджера с использованием имени, адреса электронной почты и пароля",
+     *     tags={"Регистрация и авторизация"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/RegisterRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Успешный ответ",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string", description="JWT токен")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Ошибка валидации",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="object", description="Сообщения об ошибках валидации")
+     *         )
+     *     )
+     * )
+     */
+    public function registerManager(Request $request)
+    { 
+        $statuses = config('ApiStatus');
+        
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
+            //'device_name' => ['required', 'string']
+        ]); 
+
+        if ($validator->fails()) {
+            $this->response['message'] = 'Register validation failed';
+            $this->response['status'] = $statuses['warning'];
+    
+            return $this->response;
+        }
+
+        
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        $input['user_role'] = 'manager';
+        $user = User::create($input);
+
+        //$token = $user->createToken($request->device_name)->plainTextToken;
+        $token = $user->createToken('token-name')->plainTextToken;
+
+        $this->response['data'] = $token;
+        $this->response['message'] = 'New manager token';
+        $this->response['status'] = $statuses['ok'];
+
+        return $this->response;
+    }
+    
     /**
      * @OA\Post(
      *     path="/api/sanctum/token",

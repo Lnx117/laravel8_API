@@ -279,7 +279,7 @@ class ApplicationsController extends Controller
      * @OA\delete(
      *      path="/api/sanctum/deleteApplicationById/{id}",
      *      description="Удаляет заявку по ID",
-     *      tags={"Заявку"},
+     *      tags={"Заявки"},
      *      summary="Delete app by ID",
      *      security={{"apiAuth":{}}},
      *      @OA\Parameter(
@@ -331,7 +331,7 @@ class ApplicationsController extends Controller
     }
 
     /**
-     * @OA\Put(
+     * @OA\Post(
      *      path="/api/sanctum/createApplication",
      *      description="Создает заявку",
      *      tags={"Заявки"},

@@ -25,7 +25,9 @@ class ApiUsersRouteTest extends TestCase
         $statuses = config('ApiStatus');
 
         //Создает юзера по модели User
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
         
         //Использует юзера, не использует явную авторизацию с токенами как в реале, а  юзает временные CSRF токены
         $response = $this->actingAs($this->user, 'sanctum')
@@ -43,7 +45,9 @@ class ApiUsersRouteTest extends TestCase
     public function testUpdateUserByIdOrEmail()
     {
         // Используем старого юзера из свойства protected $user;
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
         // Генерируем новые данные для обновления
         $newName = $this->faker->name;
         $newEmail = $this->faker->unique()->safeEmail;
@@ -74,6 +78,7 @@ class ApiUsersRouteTest extends TestCase
         // Создаем тестового пользователя
         $this->user = User::factory()->create([
             'email' => 'test@example.com',
+            'user_role' => 'manager',
         ]);
 
         // Вызываем метод с идентификатором пользователя
@@ -101,6 +106,7 @@ class ApiUsersRouteTest extends TestCase
         // Создаем тестового пользователя
         $this->user = User::factory()->create([
             'email' => 'test@example.com',
+            'user_role' => 'manager',
         ]);
 
         // Вызываем метод с идентификатором пользователя

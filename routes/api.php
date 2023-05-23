@@ -30,12 +30,15 @@ use Illuminate\Support\Facades\Hash;
 Route::prefix('sanctum')->namespace('Auth')->group(function() {
     //create user
     Route::post('register', [AuthController::class, 'register']);
+    //create manager
+    Route::post('registerManager', [AuthController::class, 'registerManager'])
+    ->middleware(['auth:sanctum', 'CheckAdminRole']);
     //get token by log/pas
     Route::post('token', [AuthController::class, 'token']);
 });
 
 //Work with users (employes)
-Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('Users')->group(function() {
+Route::middleware(['auth:sanctum','checkAdminOrManagerRole'])->prefix('sanctum')->namespace('Users')->group(function() {
     Route::get('getUsersList', [UserController::class, 'getUsersList']);
     Route::put('updateUserByIdOrEmail/{user}', [UserController::class, 'updateUserByIdOrEmail']);
     Route::get('getUserByIdOrEmail/{user}', [UserController::class, 'getUserByIdOrEmail']);
@@ -43,7 +46,7 @@ Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('Users')->group(
 });
 
 //Work with tasks
-Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('task')->group(function() {
+Route::middleware(['auth:sanctum'])->prefix('sanctum')->namespace('task')->group(function() {
     Route::get('createTask/{application_id}/{master_id}/{status}', [TaskController::class, 'createTask']);
     Route::get('getTasksList', [TaskController::class, 'getTasksList']);
     Route::put('updateTaskById/{id}', [TaskController::class, 'updateTaskById']);
@@ -52,8 +55,8 @@ Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('task')->group(f
 });
 
 //Work with applications
-Route::middleware('auth:sanctum')->prefix('sanctum')->namespace('applications')->group(function() {
-    Route::put('createApplication', [ApplicationsController::class, 'createApplication']);
+Route::middleware(['auth:sanctum','checkAdminOrManagerRole'])->prefix('sanctum')->namespace('applications')->group(function() {
+    Route::post('createApplication', [ApplicationsController::class, 'createApplication']);
     Route::get('getApplicationsList', [ApplicationsController::class, 'getApplicationsList']);
     Route::put('updateApplicationById/{id}', [ApplicationsController::class, 'updateApplicationById']);
     Route::get('getApplicationById/{id}', [ApplicationsController::class, 'getApplicationById']);

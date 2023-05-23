@@ -210,7 +210,7 @@
         "/api/sanctum/deleteApplicationById/{id}": {
             "delete": {
                 "tags": [
-                    "Заявку"
+                    "Заявки"
                 ],
                 "summary": "Delete app by ID",
                 "description": "Удаляет заявку по ID",
@@ -242,13 +242,13 @@
             }
         },
         "/api/sanctum/createApplication": {
-            "put": {
+            "post": {
                 "tags": [
                     "Заявки"
                 ],
                 "summary": "Create task",
                 "description": "Создает заявку",
-                "operationId": "7a33bb533f4fdace265c749e0afeee78",
+                "operationId": "15029bd880c2d2a850e4b507a3938630",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -359,6 +359,60 @@
                 "summary": "Регистрация нового пользователя",
                 "description": "Регистрация нового пользователя с использованием имени, адреса электронной почты и пароля",
                 "operationId": "0f4a9954a4d1a5297af4380586b1039e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "JWT токен",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Ошибка валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Сообщения об ошибках валидации",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sanctum/registerManager": {
+            "post": {
+                "tags": [
+                    "Регистрация и авторизация"
+                ],
+                "summary": "Регистрация менеджера",
+                "description": "Регистрация нового менеджера с использованием имени, адреса электронной почты и пароля",
+                "operationId": "cab70c6d9409d5695fbd2f5c0dc58874",
                 "requestBody": {
                     "required": true,
                     "content": {
