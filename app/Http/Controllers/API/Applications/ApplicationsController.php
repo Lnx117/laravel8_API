@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Applications;
+namespace App\Http\Controllers\API\Applications;
 
 use Illuminate\Http\Request;
 // use App\Models\User;
 use App\Models\Applications;
 use App\Http\Controllers\Controller;
+use App\Services\ApplicationsService;
 // use Illuminate\Support\Facades\Validator;
 // use Illuminate\Support\Facades\Hash;
 
@@ -38,16 +39,13 @@ class ApplicationsController extends Controller
  *     ),
  * )
  */
-    public function getApplicationsList()
+    public function getApplicationsList(ApplicationsService $applicationsService)
     {
-        $statuses = config('ApiStatus');
 
         //Получаем список задач
-        $this->response['data'] = Applications::all();
-        $this->response['message'] = 'All apps';
-        $this->response['status'] = $statuses['ok'];
+        $serviceResponse = $applicationsService->getApplicationsList();
 
-        return $this->response;
+        return $serviceResponse;
     }
 
 /**
@@ -175,55 +173,11 @@ class ApplicationsController extends Controller
  *      )
  * )
  */
-    public function updateApplicationById(Request $request, $id)
+    public function updateApplicationById(Request $request, ApplicationsService $applicationsService, $id)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $applicationsService->updateApplicationById($request, $id);
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($id) && !empty($id)) {
-            $app = Applications::find($id);
-
-            if (!$app) {
-                $this->response['message'] = 'App not found';
-                $this->response['status'] = $statuses['warning'];
-        
-                return $this->response;
-            }
-
-            // заполняем модель только теми полями, которые пришли в запросе
-            $app->fill($request->only([
-                'customer_first_name',
-                'customer_last_name',
-                'customer_patronymic',
-                'customer_phone',
-                'app_city',
-                'app_street',
-                'app_house_number',
-                'app_house_building',
-                'app_flat_num',
-                'app_floor_num',
-                'app_house_entrance',
-                'app_created_at',
-                'app_to_execute_at',
-                'problem_text',
-                'master_id',
-                'app_status',
-                'bitrix_customer_id',
-            ]));
-
-            // сохраняем изменения в базу данных
-            $app->save();
-            $app = Applications::find($id);
-
-            $this->response['data'] = $app;
-            $this->response['message'] = 'App updated successfully';
-            $this->response['status'] = $statuses['ok'];
-    
-            return $this->response;
-        } else {
-            $this->response['message'] = 'Id is not numeric or empty';
-            $this->response['status'] = $statuses['warning'];
-        }
+        return $serviceResponse;
     }
 
 /**
@@ -252,27 +206,11 @@ class ApplicationsController extends Controller
  *      )
  * )
  */
-    public function getApplicationById($id)
+    public function getApplicationById(ApplicationsService $applicationsService, $id)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $applicationsService->getApplicationById($id);
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($id) && !empty($id)) {
-            $app = Applications::find($id);
-        }
-
-        if (empty($app)) {
-            $this->response['message'] = 'App not found';
-            $this->response['status'] = $statuses['warning'];
-    
-            return $this->response;
-        }
-
-        $this->response['data'] = $app;
-        $this->response['message'] = 'App founded successfully';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 
     /**
@@ -301,33 +239,11 @@ class ApplicationsController extends Controller
      *      )
      * )
      */
-    public function deleteApplicationById($id)
+    public function deleteApplicationById(ApplicationsService $applicationsService, $id)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $applicationsService->deleteApplicationById($id);
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($id)) {
-            $app = Applications::find($id);
-        }
-        if (empty($app)) {
-            $this->response['message'] = 'App not found';
-            $this->response['status'] = $statuses['warning'];
-    
-            return $this->response;
-        }
-
-        $app = $app->delete();
-        if ($app != true) {
-            $this->response['message'] = 'App not found';
-            $this->response['status'] = $statuses['warning'];
-
-            return $this->response;
-        }
-        
-        $this->response['message'] = 'App deleted successfully';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 
     /**
@@ -446,52 +362,10 @@ class ApplicationsController extends Controller
      *      )
      * )
      */
-    public function createApplication(Request $request)
+    public function createApplication(ApplicationsService $applicationsService, Request $request)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $applicationsService->createApplication($request);
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (!empty($request)) {
-            $app = new Applications;
-
-            $app->fill($request->only([
-                'bitrix_customer_id',
-                'customer_first_name',
-                'customer_last_name',
-                'customer_patronymic',
-                'customer_phone',
-                'app_city',
-                'app_street',
-                'app_house_number',
-                'app_house_building',
-                'app_flat_num',
-                'app_floor_num',
-                'app_house_entrance',
-                'problem_text',
-                'master_id',
-                'app_status',
-            ]));
-
-            // сохраняем изменения в базу данных
-            $app->save();
-
-            if (empty($app)) {
-                $this->response['message'] = 'Application is not created';
-                $this->response['status'] = $statuses['warning'];
-
-                return $this->response;
-            }
-        } else {
-            $this->response['message'] = 'Application data is empty';
-            $this->response['status'] = $statuses['warning'];
-
-            return $this->response;
-        }
-
-        $this->response['data'] = $app;
-        $this->response['message'] = 'Application created successfully';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 }

@@ -4,10 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ExampleController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Users\UserController;
-use App\Http\Controllers\Task\TaskController;
-use App\Http\Controllers\Applications\ApplicationsController;
+use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\Users\UserController;
+use App\Http\Controllers\API\Task\TaskController;
+use App\Http\Controllers\API\Applications\ApplicationsController;
 
 // use App\Http\Controllers\AppController;
 

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
@@ -42,35 +43,11 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function register(Request $request)
+    public function register(AuthService $authService, Request $request)
     { 
-        $statuses = config('ApiStatus');
+        $serviceResponse = $authService->register($request);
 
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-            //'device_name' => ['required', 'string']
-        ]); 
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
-
-        
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-
-        //$token = $user->createToken($request->device_name)->plainTextToken;
-        $token = $user->createToken('token-name')->plainTextToken;
-
-        
-        $this->response['data'] = $token;
-        $this->response['message'] = 'New user token';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 
     /**
@@ -99,38 +76,11 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function registerManager(Request $request)
+    public function registerManager(AuthService $authService, Request $request)
     { 
-        $statuses = config('ApiStatus');
-        
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-            //'device_name' => ['required', 'string']
-        ]); 
+        $serviceResponse = $authService->registerManager($request);
 
-        if ($validator->fails()) {
-            $this->response['message'] = 'Register validation failed';
-            $this->response['status'] = $statuses['warning'];
-    
-            return $this->response;
-        }
-
-        
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $input['user_role'] = 'manager';
-        $user = User::create($input);
-
-        //$token = $user->createToken($request->device_name)->plainTextToken;
-        $token = $user->createToken('token-name')->plainTextToken;
-
-        $this->response['data'] = $token;
-        $this->response['message'] = 'New manager token';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
     
     /**
@@ -164,28 +114,10 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function token(Request $request)
+    public function token(AuthService $authService, Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8'],
-            //'device_name' => ['required', 'string']
-        ]);    
-        
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
+        $serviceResponse = $authService->token($request);
 
-    
-        $user = User::where('email', $request->email)->first();
-
-    
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
-        }
-
-        //response()->json(['token' => $user->createToken($request->device_name)->plainTextToken]);
-        return response()->json(['token' => $user->createToken('token-name')->plainTextToken]);
-
+        return $serviceResponse;
     }
 }

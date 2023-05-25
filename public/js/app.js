@@ -5062,10 +5062,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      message: 'Привет'
+    };
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  watch: {
+    message: function message(newMessage, oldMessage) {
+      console.log('Новое сообщение:', newMessage);
+      console.log('Старое сообщение:', oldMessage);
+    }
   }
 });
 
@@ -27903,6 +27918,12 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
+              _vm._v(
+                "\n                    I'm an example component.\n                "
+              ),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
               _vm._v(
                 "\n                    I'm an example component.\n                "
               ),

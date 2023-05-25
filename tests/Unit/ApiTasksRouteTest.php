@@ -143,7 +143,7 @@ class ApiTasksRouteTest extends TestCase
 
         $newAppId = $this->faker->unique()->randomNumber(2);
         $newMasterId = $this->faker->unique()->randomNumber(2);
-        $newStatus = $this->faker->name;
+        $newStatus = 'Принято';
 
         // Вызываем метод с идентификатором пользователя
         $response = $this->actingAs($this->user, 'sanctum')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Task;
+namespace App\Http\Controllers\API\Task;
 
 use Illuminate\Http\Request;
 // use App\Models\User;
@@ -8,6 +8,7 @@ use App\Models\Tasks;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Services\TasksService;
 
 class TaskController extends Controller
 {
@@ -38,16 +39,11 @@ class TaskController extends Controller
  *     ),
  * )
  */
-    public function getTasksList()
+    public function getTasksList(TasksService $tasksService)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $tasksService->getTasksList();
 
-        //Получаем список задач
-        $this->response['data'] = Tasks::all();
-        $this->response['message'] = 'All tasks';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 
 /**
@@ -103,39 +99,11 @@ class TaskController extends Controller
  *      )
  * )
  */
-    public function updateTaskById(Request $request, $id)
+    public function updateTaskById(TasksService $tasksService, Request $request, $id)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $tasksService->updateTaskById($request, $id);
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($id) && !empty($id)) {
-            $task = Tasks::find($id);
-
-            if (!$task) {
-                $this->response['message'] = 'Task not found';
-                $this->response['status'] = $statuses['warning'];
-        
-                return $this->response;
-            }
-
-            // заполняем модель только теми полями, которые пришли в запросе
-            $task->fill($request->only([
-                'application_id',
-                'master_id',
-                'status',
-            ]));
-
-            // сохраняем изменения в базу данных
-            $task->save();
-            $task = Tasks::find($id);
-
-            $this->response['data'] = $task;
-            $this->response['message'] = 'Task updated successfully';
-            $this->response['status'] = $statuses['ok'];
-    
-            return $this->response;
-        }
-
+        return $serviceResponse;
     }
 
 /**
@@ -164,27 +132,11 @@ class TaskController extends Controller
  *      )
  * )
  */
-    public function getTaskById($id)
+    public function getTaskById(TasksService $tasksService, $id)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $tasksService->getTaskById($id);
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($id) && !empty($id)) {
-            $task = Tasks::find($id);
-        }
-
-        if (empty($task)) {
-            $this->response['message'] = 'Task not found';
-            $this->response['status'] = $statuses['warning'];
-    
-            return $this->response;
-        }
-
-        $this->response['data'] = $task;
-        $this->response['message'] = 'Task founded successfully';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 
     /**
@@ -213,33 +165,11 @@ class TaskController extends Controller
      *      )
      * )
      */
-    public function deleteTaskById($id)
+    public function deleteTaskById(TasksService $tasksService, $id)
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $tasksService->deleteTaskById($id);
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($id)) {
-            $task = Tasks::find($id);
-        }
-        if (empty($task)) {
-            $this->response['message'] = 'Task not found';
-            $this->response['status'] = $statuses['warning'];
-    
-            return $this->response;
-        }
-
-        $task = $task->delete();
-        if ($task != true) {
-            $this->response['message'] = 'Task not found';
-            $this->response['status'] = $statuses['warning'];
-
-            return $this->response;
-        }
-        
-        $this->response['message'] = 'Task deleted successfully';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 
     /**
@@ -286,37 +216,10 @@ class TaskController extends Controller
      *      )
      * )
      */
-    public function createTask($application_id, $master_id, $status = 'Принято')
+    public function createTask(TasksService $tasksService, $application_id, $master_id, $status = 'Принято')
     {
-        $statuses = config('ApiStatus');
+        $serviceResponse = $tasksService->createTask($application_id, $master_id, $status = 'Принято');
 
-        // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($application_id) && !empty($application_id) && is_numeric($master_id) && !empty($master_id)
-        && !empty($status)) {
-            $task = new Tasks;
-            $task->application_id =  $application_id;
-            $task->master_id =  $master_id;
-            $task->status = $status;
-
-            // сохраняем изменения в базу данных
-            $task->save();
-            if (empty($task)) {
-                $this->response['message'] = 'Task not created';
-                $this->response['status'] = $statuses['warning'];
-
-                return $this->response;
-            }
-        } else {
-            $this->response['message'] = 'IDs is not numeric or status is empty';
-            $this->response['status'] = $statuses['warning'];
-
-            return $this->response;
-        }
-
-        $this->response['data'] = $task;
-        $this->response['message'] = 'Task created successfully';
-        $this->response['status'] = $statuses['ok'];
-
-        return $this->response;
+        return $serviceResponse;
     }
 }

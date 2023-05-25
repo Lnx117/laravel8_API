@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MyPageController;
+use App\Http\Controllers\Applications\ApplicationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//Тестовая страница
+Route::get('/my-page', [MyPageController::class, 'index']);
+
+//Страница заявлений
+Route::get('/app', [ApplicationsController::class, 'test']);

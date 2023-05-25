@@ -33,7 +33,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Заявки</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Задачи</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Мастера</a>
+                        </li>  
                     </ul>
 
                     <!-- Right Side Of Navbar -->

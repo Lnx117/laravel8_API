@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'LiftExpert'),
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +177,14 @@ return [
 
         //Swagger
         L5Swagger\L5SwaggerServiceProvider::class,
+
+        /*
+         * Custom Service Providers...
+         */
+        \App\Providers\ApplicationsServiceProvider::class,
+        \App\Providers\UsersServiceProvider::class,
+        \App\Providers\TasksServiceProvider::class,
+        \App\Providers\AuthCustomServiceProvider::class,
 
     ],
 
