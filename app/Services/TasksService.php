@@ -3,9 +3,21 @@ namespace App\Services;
 
 use App\Models\Tasks;
 use Illuminate\Support\Facades\Config;
+use App\Interfaces\TaskRepositoryInterface;
+use App\Interfaces\TasksServiceInterface;
 
-class TasksService
+class TasksService implements TasksServiceInterface
 {
+    protected $taskRepository;
+
+    //Dependency injection
+    //UsersService получает на вход реализацию интерфейса UserRepositoryInterface
+    //Реализация прописана в провайдере который создает объект
+    public function __construct(TaskRepositoryInterface $taskRepository)
+    {
+        $this->taskRepository = $taskRepository;
+    }
+
     protected $response = [
         'status' => '',
         'message' => '',
@@ -17,7 +29,7 @@ class TasksService
         $statuses = config('ApiStatus');
 
         //Получаем список задач
-        $this->response['data'] = Tasks::all();
+        $this->response['data'] = $this->taskRepository->getAllTasks();
         $this->response['message'] = 'All tasks';
         $this->response['status'] = $statuses['ok'];
 
@@ -30,7 +42,7 @@ class TasksService
 
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($id) && !empty($id)) {
-            $task = Tasks::find($id);
+            $task = $this->taskRepository->getById($id);
 
             if (!$task) {
                 $this->response['message'] = 'Task not found';
@@ -40,15 +52,16 @@ class TasksService
             }
 
             // заполняем модель только теми полями, которые пришли в запросе
-            $task->fill($request->only([
+            $task = $this->taskRepository->fill($task, $request->only([
                 'application_id',
                 'master_id',
                 'status',
             ]));
 
             // сохраняем изменения в базу данных
-            $task->save();
-            $task = Tasks::find($id);
+            $this->taskRepository->save($task);
+            //$task->save();
+            $task = $this->taskRepository->getById($id);
 
             $this->response['data'] = $task;
             $this->response['message'] = 'Task updated successfully';
@@ -65,7 +78,7 @@ class TasksService
 
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($id) && !empty($id)) {
-            $task = Tasks::find($id);
+            $task = $this->taskRepository->getById($id);
         }
 
         if (empty($task)) {
@@ -88,7 +101,7 @@ class TasksService
 
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($id)) {
-            $task = Tasks::find($id);
+            $task = $this->taskRepository->getById($id);
         }
         if (empty($task)) {
             $this->response['message'] = 'Task not found';
@@ -97,7 +110,7 @@ class TasksService
             return $this->response;
         }
 
-        $task = $task->delete();
+        $task = $this->taskRepository->delete($task);
         if ($task != true) {
             $this->response['message'] = 'Task not found';
             $this->response['status'] = $statuses['warning'];
@@ -124,7 +137,7 @@ class TasksService
             $task->status = $status;
 
             // сохраняем изменения в базу данных
-            $task->save();
+            $task = $this->taskRepository->save($task);
             if (empty($task)) {
                 $this->response['message'] = 'Task not created';
                 $this->response['status'] = $statuses['warning'];

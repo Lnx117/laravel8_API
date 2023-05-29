@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MyPageController;
-use App\Http\Controllers\Applications\ApplicationsController;
+use App\Http\Controllers\Pages\Applications\ApplicationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +27,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/my-page', [MyPageController::class, 'index']);
 
 //Страница заявлений
-Route::get('/app', [ApplicationsController::class, 'test']);
+Route::get('/app', [ApplicationsController::class, 'getApplicationsList']);

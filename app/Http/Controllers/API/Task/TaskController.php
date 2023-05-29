@@ -8,10 +8,18 @@ use App\Models\Tasks;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\Services\TasksService;
+
+use App\Interfaces\TasksServiceInterface;
 
 class TaskController extends Controller
 {
+    protected $taskService;
+
+    public function __construct(TasksServiceInterface $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
     protected $response = [
         'status' => '',
         'message' => '',
@@ -39,9 +47,9 @@ class TaskController extends Controller
  *     ),
  * )
  */
-    public function getTasksList(TasksService $tasksService)
+    public function getTasksList()
     {
-        $serviceResponse = $tasksService->getTasksList();
+        $serviceResponse =$this->taskService->getTasksList();
 
         return $serviceResponse;
     }
@@ -99,9 +107,9 @@ class TaskController extends Controller
  *      )
  * )
  */
-    public function updateTaskById(TasksService $tasksService, Request $request, $id)
+    public function updateTaskById(Request $request, $id)
     {
-        $serviceResponse = $tasksService->updateTaskById($request, $id);
+        $serviceResponse = $this->taskService->updateTaskById($request, $id);
 
         return $serviceResponse;
     }
@@ -132,9 +140,9 @@ class TaskController extends Controller
  *      )
  * )
  */
-    public function getTaskById(TasksService $tasksService, $id)
+    public function getTaskById($id)
     {
-        $serviceResponse = $tasksService->getTaskById($id);
+        $serviceResponse = $this->taskService->getTaskById($id);
 
         return $serviceResponse;
     }
@@ -165,9 +173,9 @@ class TaskController extends Controller
      *      )
      * )
      */
-    public function deleteTaskById(TasksService $tasksService, $id)
+    public function deleteTaskById($id)
     {
-        $serviceResponse = $tasksService->deleteTaskById($id);
+        $serviceResponse = $this->taskService->deleteTaskById($id);
 
         return $serviceResponse;
     }
@@ -216,9 +224,9 @@ class TaskController extends Controller
      *      )
      * )
      */
-    public function createTask(TasksService $tasksService, $application_id, $master_id, $status = 'Принято')
+    public function createTask($application_id, $master_id, $status = 'Принято')
     {
-        $serviceResponse = $tasksService->createTask($application_id, $master_id, $status = 'Принято');
+        $serviceResponse = $this->taskService->createTask($application_id, $master_id, $status = 'Принято');
 
         return $serviceResponse;
     }

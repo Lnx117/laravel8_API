@@ -7,10 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Services\AuthService;
+use App\Interfaces\AuthServiceInterface;
 
 class AuthController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthServiceInterface $authService)
+    {
+        $this->authService = $authService;
+    }
+
     protected $response = [
         'status' => '',
         'message' => '',
@@ -43,9 +50,9 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function register(AuthService $authService, Request $request)
+    public function register(Request $request)
     { 
-        $serviceResponse = $authService->register($request);
+        $serviceResponse = $this->authService->register($request);
 
         return $serviceResponse;
     }
@@ -76,9 +83,9 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function registerManager(AuthService $authService, Request $request)
+    public function registerManager(Request $request)
     { 
-        $serviceResponse = $authService->registerManager($request);
+        $serviceResponse = $this->authService->registerManager($request);
 
         return $serviceResponse;
     }
@@ -114,9 +121,9 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function token(AuthService $authService, Request $request)
+    public function token(Request $request)
     {
-        $serviceResponse = $authService->token($request);
+        $serviceResponse = $this->authService->token($request);
 
         return $serviceResponse;
     }

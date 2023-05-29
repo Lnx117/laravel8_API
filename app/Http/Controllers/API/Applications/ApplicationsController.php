@@ -3,15 +3,22 @@
 namespace App\Http\Controllers\API\Applications;
 
 use Illuminate\Http\Request;
-// use App\Models\User;
 use App\Models\Applications;
 use App\Http\Controllers\Controller;
-use App\Services\ApplicationsService;
-// use Illuminate\Support\Facades\Validator;
-// use Illuminate\Support\Facades\Hash;
+//Интерфейс сервиса
+use App\Interfaces\ApplicationsServiceInterface;
 
 class ApplicationsController extends Controller
 {
+    protected $appService;
+
+    //На вход требуем объект, который реализует интерфейс ApplicationsServiceInterface
+    //Он автоматически вернется благодаря сервис провайдеру
+    public function __construct(ApplicationsServiceInterface $appService)
+    {
+        $this->appService = $appService;
+    }
+
     protected $response = [
         'status' => '',
         'message' => '',
@@ -39,11 +46,11 @@ class ApplicationsController extends Controller
  *     ),
  * )
  */
-    public function getApplicationsList(ApplicationsService $applicationsService)
+    public function getApplicationsList()
     {
 
         //Получаем список задач
-        $serviceResponse = $applicationsService->getApplicationsList();
+        $serviceResponse = $this->appService->getApplicationsList();
 
         return $serviceResponse;
     }
@@ -173,9 +180,9 @@ class ApplicationsController extends Controller
  *      )
  * )
  */
-    public function updateApplicationById(Request $request, ApplicationsService $applicationsService, $id)
+    public function updateApplicationById(Request $request, $id)
     {
-        $serviceResponse = $applicationsService->updateApplicationById($request, $id);
+        $serviceResponse = $this->appService->updateApplicationById($request, $id);
 
         return $serviceResponse;
     }
@@ -206,9 +213,9 @@ class ApplicationsController extends Controller
  *      )
  * )
  */
-    public function getApplicationById(ApplicationsService $applicationsService, $id)
+    public function getApplicationById($id)
     {
-        $serviceResponse = $applicationsService->getApplicationById($id);
+        $serviceResponse = $this->appService->getApplicationById($id);
 
         return $serviceResponse;
     }
@@ -239,9 +246,9 @@ class ApplicationsController extends Controller
      *      )
      * )
      */
-    public function deleteApplicationById(ApplicationsService $applicationsService, $id)
+    public function deleteApplicationById($id)
     {
-        $serviceResponse = $applicationsService->deleteApplicationById($id);
+        $serviceResponse = $this->appService->deleteApplicationById($id);
 
         return $serviceResponse;
     }
@@ -362,9 +369,9 @@ class ApplicationsController extends Controller
      *      )
      * )
      */
-    public function createApplication(ApplicationsService $applicationsService, Request $request)
+    public function createApplication(Request $request)
     {
-        $serviceResponse = $applicationsService->createApplication($request);
+        $serviceResponse = $this->appService->createApplication($request);
 
         return $serviceResponse;
     }

@@ -8,6 +8,11 @@
                     <div class="card-body">
                         I'm an example component.
                     </div>
+                    <div>
+                        <ul>
+                            <li v-for="application in applications" :key="application.id">{{ application.customer_first_name }}</li>
+                        </ul>
+                    </div>
 
                     <div class="card-footer">
                         I'm an example component.
@@ -20,13 +25,14 @@
 
 <script>
     export default {
+        props: ['applications'],
         data() {
             return {
                 message: 'Привет',
             };
         },
         mounted() {
-            console.log('Component mounted.');
+            console.log(applications);
         },
         watch: {
             message(newMessage, oldMessage) {

@@ -8,9 +8,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Services\UsersService;
+use App\Interfaces\UsersServiceInterface;
 
 class UserController extends Controller
 {
+    protected $usersService;
+
+    public function __construct(UsersServiceInterface $usersService)
+    {
+        $this->usersService = $usersService;
+    }
 
     protected $response = [
         'status' => '',
@@ -38,9 +45,9 @@ class UserController extends Controller
  *     ),
  * )
  */
-    public function getUsersList(UsersService $usersService)
+    public function getUsersList()
     {
-        $serviceResponse = $usersService->getUsersList();
+        $serviceResponse = $this->usersService->getUsersList();
 
         return $serviceResponse;
     }
@@ -92,9 +99,9 @@ class UserController extends Controller
  *      )
  * )
  */
-    public function updateUserByIdOrEmail(UsersService $usersService, Request $request, $user)
+    public function updateUserByIdOrEmail(Request $request, $user)
     {
-        $serviceResponse = $usersService->updateUserByIdOrEmail($request, $user);
+        $serviceResponse = $this->usersService->updateUserByIdOrEmail($request, $user);
 
         return $serviceResponse;
     }
@@ -125,9 +132,9 @@ class UserController extends Controller
  *      )
  * )
  */
-    public function getUserByIdOrEmail(UsersService $usersService, $idOrEmail)
+    public function getUserByIdOrEmail($idOrEmail)
     {
-        $serviceResponse = $usersService->getUserByIdOrEmail($idOrEmail);
+        $serviceResponse = $this->usersService->getUserByIdOrEmail($idOrEmail);
 
         return $serviceResponse;
     }

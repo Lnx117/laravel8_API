@@ -3,9 +3,21 @@ namespace App\Services;
 
 use App\Models\Applications;
 use Illuminate\Support\Facades\Config;
+use App\Interfaces\ApplicationsRepositoryInterface;
+use App\Interfaces\ApplicationsServiceInterface;
 
-class ApplicationsService
+class ApplicationsService implements ApplicationsServiceInterface
 {
+    protected $appRepository;
+
+    //Dependency injection
+    //На вход требуем объект, который реализует интерфейс ApplicationsServiceInterface
+    //Он автоматически вернется благодаря сервис провайдеру
+    public function __construct(ApplicationsRepositoryInterface $appRepository)
+    {
+        $this->appRepository = $appRepository;
+    }
+
     protected $response = [
         'status' => '',
         'message' => '',
@@ -16,7 +28,7 @@ class ApplicationsService
     {
         $statuses = Config::get('ApiStatus');
 
-        $this->response['data'] = Applications::all();
+        $this->response['data'] = $this->appRepository->getAllApplications();
         $this->response['message'] = 'All apps';
         $this->response['status'] = $statuses['ok'];
 
@@ -29,7 +41,7 @@ class ApplicationsService
 
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($id) && !empty($id)) {
-            $app = Applications::find($id);
+            $app = $this->appRepository->getById($id);
 
             if (!$app) {
                 $this->response['message'] = 'App not found';
@@ -39,7 +51,7 @@ class ApplicationsService
             }
 
             // заполняем модель только теми полями, которые пришли в запросе
-            $app->fill($request->only([
+            $app = $this->appRepository->fill($app, $request->only([
                 'customer_first_name',
                 'customer_last_name',
                 'customer_patronymic',
@@ -60,8 +72,9 @@ class ApplicationsService
             ]));
 
             // сохраняем изменения в базу данных
-            $app->save();
-            $app = Applications::find($id);
+            $this->appRepository->save($app);
+            //$task->save();
+            $app = $this->appRepository->getById($id);
 
             $this->response['data'] = $app;
             $this->response['message'] = 'App updated successfully';
@@ -80,7 +93,7 @@ class ApplicationsService
 
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($id) && !empty($id)) {
-            $app = Applications::find($id);
+            $app = $this->appRepository->getById($id);
         }
 
         if (empty($app)) {
@@ -103,7 +116,7 @@ class ApplicationsService
 
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($id)) {
-            $app = Applications::find($id);
+            $app = $this->appRepository->getById($id);
         }
         if (empty($app)) {
             $this->response['message'] = 'App not found';
@@ -112,7 +125,7 @@ class ApplicationsService
             return $this->response;
         }
 
-        $app = $app->delete();
+        $app = $this->appRepository->delete($app);
         if ($app != true) {
             $this->response['message'] = 'App not found';
             $this->response['status'] = $statuses['warning'];
@@ -134,7 +147,7 @@ class ApplicationsService
         if (!empty($request)) {
             $app = new Applications;
 
-            $app->fill($request->only([
+            $app = $this->appRepository->fill($app, $request->only([
                 'bitrix_customer_id',
                 'customer_first_name',
                 'customer_last_name',
@@ -153,7 +166,7 @@ class ApplicationsService
             ]));
 
             // сохраняем изменения в базу данных
-            $app->save();
+            $this->appRepository->save($app);
 
             if (empty($app)) {
                 $this->response['message'] = 'Application is not created';

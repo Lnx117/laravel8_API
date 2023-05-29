@@ -3,9 +3,21 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
+use App\Interfaces\UserRepositoryInterface;
+use App\Interfaces\UsersServiceInterface;
 
-class UsersService
+class UsersService implements UsersServiceInterface
 {
+    protected $userRepository;
+
+    //Dependency injection
+    //UsersService получает на вход реализацию интерфейса UserRepositoryInterface
+    //Реализация прописана в провайдере который создает объект
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     protected $response = [
         'status' => '',
         'message' => '',
@@ -18,24 +30,24 @@ class UsersService
         $statuses = config('ApiStatus');
 
         //Получаем список рользователей
-        $this->response['data'] = User::all();
+        $this->response['data'] = $this->userRepository->getAllUsers();
         $this->response['message'] = 'All users list';
         $this->response['status'] = $statuses['ok'];
 
         return $this->response;
     }
 
-    public function updateUserByIdOrEmail($request, $user)
+    public function updateUserByIdOrEmail($request, $userIdOrEmail)
     {
         //Получаем статусы ответа
         $statuses = config('ApiStatus');
 
         // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($user)) {
-            $user = User::find($user);
+        if (is_numeric($userIdOrEmail)) {
+            $user = $this->userRepository->getById($userIdOrEmail);
         } else {
             // в противном случае ищем пользователя по email
-            $user = User::where('email', $user)->firstOrFail();
+            $user = $this->userRepository->getByEmail($userIdOrEmail);
         }
 
         if (!$user) {
@@ -46,15 +58,21 @@ class UsersService
         }
         // заполняем модель только теми полями, которые пришли в запросе
         // пока обновляем либо имя, либо пароль
-        $user->fill($request->only([
+        $user = $this->userRepository->fill($user, $request->only([
             'name',
             'email',
         ]));
 
         // сохраняем изменения в базу данных
-        $user->save();
+        $this->userRepository->save($user);
 
-        $user = User::find($user);
+        if (is_numeric($userIdOrEmail)) {
+            $user = $this->userRepository->getById($userIdOrEmail);
+        } else {
+            // в противном случае ищем пользователя по email
+            $user = $this->userRepository->getByEmail($userIdOrEmail);
+        }
+
         $this->response['data'] = $user;
         $this->response['message'] = 'User updated successfully';
         $this->response['status'] = $statuses['ok'];
@@ -62,18 +80,18 @@ class UsersService
         return $this->response;
     }
 
-    public function getUserByIdOrEmail($idOrEmail)
+    public function getUserByIdOrEmail($userIdOrEmail)
     {
 
         //Получаем статусы ответа
         $statuses = config('ApiStatus');
 
         // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($idOrEmail)) {
-            $user = User::find($idOrEmail);
+        if (is_numeric($userIdOrEmail)) {
+            $user = $this->userRepository->getById($userIdOrEmail);
         } else {
             // в противном случае ищем пользователя по email
-            $user = User::where('email', $idOrEmail)->firstOrFail();
+            $user = $this->userRepository->getByEmail($userIdOrEmail);
         }
 
         if (!$user) {
@@ -90,17 +108,17 @@ class UsersService
         return $this->response;
     }
 
-    public function deleteUserByIdOrEmail($idOrEmail)
+    public function deleteUserByIdOrEmail($userIdOrEmail)
     {
         //Получаем статусы ответа
         $statuses = config('ApiStatus');
 
         // проверяем, является ли параметр идентификатором пользователя
-        if (is_numeric($idOrEmail)) {
-            $user = User::find($idOrEmail);
+        if (is_numeric($userIdOrEmail)) {
+            $user = $this->userRepository->getById($userIdOrEmail);
         } else {
             // в противном случае ищем пользователя по email
-            $user = User::where('email', $idOrEmail)->firstOrFail();
+            $user = $this->userRepository->getByEmail($userIdOrEmail);
         }
 
         if (!$user) {
@@ -110,7 +128,7 @@ class UsersService
             return $this->response;
         }
 
-        $user = $user->delete();
+        $user = $this->userRepository->delete($user);
 
         if ($user != true) {
             $this->response['message'] = 'User not deleted';

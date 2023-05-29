@@ -2,8 +2,13 @@
 
 namespace App\Providers;
 
-use App\Services\TasksService;
+
 use Illuminate\Support\ServiceProvider;
+
+use App\Repositories\TaskRepository;
+use App\Services\TasksService;
+use App\Interfaces\TaskRepositoryInterface;
+use App\Interfaces\TasksServiceInterface;
 
 class TasksServiceProvider extends ServiceProvider
 {
@@ -14,9 +19,15 @@ class TasksServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(TasksService::class, function($app) {
-            return new TasksService;
-        });
+        $this->app->singleton(TaskRepositoryInterface::class, TaskRepository::class);
+        
+        $this->app->singleton(TasksServiceInterface::class, TasksService::class);
+
+        //строка излишня
+        // $this->app->singleton(TasksService::class, function($app) {
+        //     $taskRepository = $app->make(TaskRepositoryInterface::class);
+        //     return new TasksService($taskRepository);
+        // });
     }
 
     /**

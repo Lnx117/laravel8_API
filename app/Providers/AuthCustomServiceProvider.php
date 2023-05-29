@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use App\Services\AuthService;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\UserRepository;
+use App\Interfaces\UserRepositoryInterface;
+use App\Services\AuthService;
+use App\Interfaces\AuthServiceInterface;
 
 class AuthCustomServiceProvider extends ServiceProvider
 {
@@ -14,9 +17,11 @@ class AuthCustomServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(AuthService::class, function($app) {
-            return new AuthService;
-        });
+        //Говорим что при вызове AuthRepositoryInterface должны иметь в виду AuthRepository
+        $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
+        
+        //Говорим что при вызове AuthServiceInterface должны иметь в виду AuthService
+        $this->app->singleton(AuthServiceInterface::class, AuthService::class);
     }
 
     /**

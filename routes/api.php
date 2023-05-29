@@ -40,6 +40,7 @@ Route::prefix('sanctum')->namespace('Auth')->group(function() {
 //Work with users (employes)
 Route::middleware(['auth:sanctum','checkAdminOrManagerRole'])->prefix('sanctum')->namespace('Users')->group(function() {
     Route::get('getUsersList', [UserController::class, 'getUsersList']);
+    Route::get('test', [UserController::class, 'test']);
     Route::put('updateUserByIdOrEmail/{user}', [UserController::class, 'updateUserByIdOrEmail']);
     Route::get('getUserByIdOrEmail/{user}', [UserController::class, 'getUserByIdOrEmail']);
     Route::delete('deleteUserByIdOrEmail/{user}', [UserController::class, 'deleteUserByIdOrEmail']);
