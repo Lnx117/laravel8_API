@@ -25,7 +25,7 @@ class ApplicationsController extends Controller
         $serviceResponse = $applicationsService->getApplicationsList();
         $serviceResponse = $serviceResponse['data'];
 
-        return view('my-page')->with('applications', $serviceResponse);
+        return view('ApplicationsPages/app-page')->with('applications', $serviceResponse);
     }
 
     // public function updateApplicationById(Request $request, ApplicationsService $applicationsService, $id)

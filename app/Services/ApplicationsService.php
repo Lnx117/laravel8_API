@@ -161,7 +161,6 @@ class ApplicationsService implements ApplicationsServiceInterface
                 'app_floor_num',
                 'app_house_entrance',
                 'problem_text',
-                'master_id',
                 'app_status',
             ]));
 

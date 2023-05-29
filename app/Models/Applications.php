@@ -15,4 +15,8 @@ class Applications extends Model
         'app_house_number', 'app_house_building', 'app_flat_num','app_floor_num', 'app_house_entrance', 'app_created_at',
         'app_to_execute_at', 'problem_text', 'master_id','app_status', 'bitrix_customer_id',
     ];
+
+    protected $attributes = [
+        'master_id' => null,
+    ];
 }

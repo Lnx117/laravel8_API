@@ -27,4 +27,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/my-page', [MyPageController::class, 'index']);
 
 //Страница заявлений
-Route::get('/app', [ApplicationsController::class, 'getApplicationsList']);
+Route::get('/app', [ApplicationsController::class, 'getApplicationsList'])->middleware('auth');

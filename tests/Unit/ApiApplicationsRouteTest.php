@@ -162,9 +162,8 @@ class ApiApplicationsRouteTest extends TestCase
             'app_house_building' => $this->faker->secondaryAddress,
             'app_flat_num' => $this->faker->randomNumber(4),
             'app_floor_num' => $this->faker->randomNumber(2),
+            'problem_text' => $this->faker->randomNumber(2),
             'app_house_entrance' => $this->faker->randomLetter,
-            'problem_text' => $this->faker->text,
-            'master_id' => $this->faker->randomNumber(),
             'app_status' => $this->faker->randomElement(['Принято', 'В работе', 'Завершено']),
         ];
 
