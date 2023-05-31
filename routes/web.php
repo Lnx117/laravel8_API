@@ -27,4 +27,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/my-page', [MyPageController::class, 'index']);
 
 //Страница заявлений
-Route::get('/app', [ApplicationsController::class, 'getApplicationsList'])->middleware('auth');
+Route::get('/app', [ApplicationsController::class, 'getApplicationsFreeList'])->middleware('auth');
+
+// //Страница заявлений
+// Route::middleware(['auth'])->prefix('app')->group(function() {
+//     //Новые заявки
+//     Route::get('new', [ApplicationsController::class, 'getApplicationsFreeList'])->middleware('auth');
+//     //Заявки назначенные
+//     Route::get('wait', [ApplicationsController::class, 'getApplicationsWaitList'])->middleware('auth');
+//     //Заявки в работе
+//     Route::get('inProgress', [ApplicationsController::class, 'getApplicationsInProgressList'])->middleware('auth');
+//     //Выполненные заявки
+//     Route::get('done', [ApplicationsController::class, 'getApplicationsDoneList'])->middleware('auth');
+// });

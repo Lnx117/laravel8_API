@@ -32,4 +32,15 @@ class ApplicationsRepository implements ApplicationsRepositoryInterface
         $app->fill($data);
         return $app;
     }
+
+    public function getByFields(array $fields): array
+    {
+        $query = Applications::query();
+
+        foreach ($fields as $field => $value) {
+            $query->where($field, $value);
+        }
+
+        return $query->get()->toArray();
+    }
 }

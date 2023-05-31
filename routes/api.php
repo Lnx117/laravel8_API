@@ -58,6 +58,7 @@ Route::middleware(['auth:sanctum'])->prefix('sanctum')->namespace('task')->group
 //Work with applications
 Route::middleware(['auth:sanctum','checkAdminOrManagerRole'])->prefix('sanctum')->namespace('applications')->group(function() {
     Route::post('createApplication', [ApplicationsController::class, 'createApplication']);
+    Route::post('getApplicationByField', [ApplicationsController::class, 'getApplicationByField']);
     Route::get('getApplicationsList', [ApplicationsController::class, 'getApplicationsList']);
     Route::put('updateApplicationById/{id}', [ApplicationsController::class, 'updateApplicationById']);
     Route::get('getApplicationById/{id}', [ApplicationsController::class, 'getApplicationById']);

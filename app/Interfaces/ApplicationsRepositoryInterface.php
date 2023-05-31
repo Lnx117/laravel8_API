@@ -9,6 +9,8 @@ interface ApplicationsRepositoryInterface
 
     public function getAllApplications(): array;
 
+    public function getByFields(array $data): array;
+
     public function save(Applications $app): Applications;
 
     public function delete(Applications $app): bool;

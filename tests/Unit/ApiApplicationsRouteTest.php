@@ -185,4 +185,46 @@ class ApiApplicationsRouteTest extends TestCase
             'customer_first_name' => $data['customer_first_name'],
         ]);
     }
+
+    public function testGetApplicationByField()
+    {
+        $statuses = config('ApiStatus');
+
+        // Создаем фейковые данные для запроса
+        $data = [
+            'customer_first_name' => $this->faker->randomNumber(7),
+            'customer_last_name' => $this->faker->randomNumber(7),
+            'app_status' => $this->faker->randomNumber(7),
+        ];
+
+        // Создаем тестового пользователя
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
+
+        $app = Applications::factory()->create([
+            'customer_first_name' => $data['customer_first_name'],
+            'customer_last_name' => $data['customer_last_name'],
+            'app_status' => $data['app_status'],
+        ]);
+
+        // Вызываем метод с идентификатором пользователя
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->post('api/sanctum/getApplicationByField/', $data);
+        
+        // Проверяем успешный статус ответа
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'data' => [
+                [
+                    'customer_first_name' => $app->customer_first_name,
+                    'customer_last_name' => $data['customer_last_name'],
+                    'app_status' => $data['app_status']
+                ]
+            ],
+            'message' => 'App founded successfully',
+            'status' =>  $statuses['ok'],
+        ]);
+    }
 }

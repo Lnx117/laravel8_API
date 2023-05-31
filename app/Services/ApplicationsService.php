@@ -186,4 +186,31 @@ class ApplicationsService implements ApplicationsServiceInterface
 
         return $this->response;
     }
+
+    public function getByFields($request)
+    {
+        $statuses = config('ApiStatus');
+
+        if(is_array($request)) {
+            $data = $request;
+        } else {
+            $data = $request->json()->all();
+        }
+
+        // проверяем, является ли параметр идентификатором пользователя
+        $app = $this->appRepository->getByFields($data);
+
+        if (empty($app)) {
+            $this->response['message'] = 'App not found';
+            $this->response['status'] = $statuses['warning'];
+    
+            return $this->response;
+        }
+
+        $this->response['data'] = $app;
+        $this->response['message'] = 'App founded successfully';
+        $this->response['status'] = $statuses['ok'];
+
+        return $this->response;
+    }
 }

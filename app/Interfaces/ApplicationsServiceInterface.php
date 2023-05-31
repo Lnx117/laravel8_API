@@ -12,4 +12,6 @@ interface ApplicationsServiceInterface
     public function deleteApplicationById($id);
 
     public function createApplication($request);
+
+    public function getByFields(array $request);
 }

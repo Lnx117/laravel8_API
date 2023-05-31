@@ -221,6 +221,128 @@ class ApplicationsController extends Controller
     }
 
     /**
+    * @OA\post(
+    *      path="/api/sanctum/getApplicationByField",
+    *      description="Получает заявку по fields",
+    *      tags={"Заявки"},
+    *      summary="Get app by fields",
+    *      security={{"apiAuth":{}}},
+    *      @OA\RequestBody(
+    *          required=true,
+    *          @OA\MediaType(
+    *              mediaType="application/json",
+    *              @OA\Schema(
+    *                  type="object",
+    *                  @OA\Property(
+    *                      property="bitrix_customer_id",
+    *                      type="string",
+    *                      example="1221321",
+    *                      description="bitrix_customer_id name"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="customer_first_name",
+    *                      type="string",
+    *                      example="Владислав",
+    *                      description="customer_first_name"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="customer_last_name",
+    *                      type="string",
+    *                      example="Остряков",
+    *                      description="customer_last_name"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="customer_patronymic",
+    *                      type="string",
+    *                      example="Павлович",
+    *                      description="customer_patronymic"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="customer_phone",
+    *                      type="string",
+    *                      example="+79128539823",
+    *                      description="User email"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_city",
+    *                      type="string",
+    *                      example="Москва",
+    *                      description="app_city"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_street",
+    *                      type="string",
+    *                      example="Поляны",
+    *                      description="app_street"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_house_number",
+    *                      type="string",
+    *                      example="45",
+    *                      description="app_house_number"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_house_building",
+    *                      type="string",
+    *                      example="-",
+    *                      description="app_house_building"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_flat_num",
+    *                      type="string",
+    *                      example="3598",
+    *                      description="app_flat_num"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_floor_num",
+    *                      type="string",
+    *                      example="32",
+    *                      description="app_floor_num"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_house_entrance",
+    *                      type="string",
+    *                      example="цу",
+    *                      description="app_house_entrance"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="problem_text",
+    *                      type="string",
+    *                      example="Все оки)",
+    *                      description="problem_text"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="master_id",
+    *                      type="string",
+    *                      example="332",
+    *                      description="master_id"
+    *                  ),
+    *                  @OA\Property(
+    *                      property="app_status",
+    *                      type="string",
+    *                      example="Принято",
+    *                      description="app_status"
+    *                  ),
+    *              )
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="App founded successfully"
+    *      ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="App not found"
+    *      )
+    * )
+    */
+    public function getApplicationByField(Request $request)
+    {
+        $serviceResponse = $this->appService->getByFields($request);
+        return $serviceResponse;
+    }
+
+    /**
      * @OA\delete(
      *      path="/api/sanctum/deleteApplicationById/{id}",
      *      description="Удаляет заявку по ID",
