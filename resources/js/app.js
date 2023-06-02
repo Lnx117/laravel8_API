@@ -23,7 +23,8 @@ window.Vue = require('vue').default;
 // Vue.component('appliactions-item-component', require('./components/Applications/ApplicationItemComponent.vue').default);
 
 import ApplicationsComponent from './components/Applications/ApplicationsComponent.vue';
-//import ApplicationItemComponent from './components/Applications/ApplicationItemComponent.vue';
+import UsersComponent from './components/Users/UsersComponent.vue';
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -34,5 +35,6 @@ const app = new Vue({
     el: '#app',
     components: {
         ApplicationsComponent,
+        UsersComponent,
     },
 });

@@ -29,6 +29,9 @@ class AuthRouteTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password',
             'user_role' => 'admin',
+            'user_firstname' => $this->faker->name,
+            'user_lastname' => $this->faker->name,
+            'user_patronymic' => $this->faker->name,
         ];
 
         $response = $this->postJson('api/sanctum/register', $userData);

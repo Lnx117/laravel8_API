@@ -37,7 +37,9 @@ class AuthService implements AuthServiceInterface
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            //'device_name' => ['required', 'string']
+            'user_firstname' => ['required', 'string', 'min:3'],
+            'user_lastname' => ['required', 'string', 'min:3'],
+            'user_patronymic' => ['required', 'string', 'min:3'],
         ]); 
 
         if ($validator->fails()) {
@@ -47,6 +49,7 @@ class AuthService implements AuthServiceInterface
         
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
+        $input['user_role'] = "master";
         $user = $this->userRepository->createUser($input);
 
         //$token = $user->createToken($request->device_name)->plainTextToken;

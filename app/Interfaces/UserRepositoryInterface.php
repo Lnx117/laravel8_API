@@ -11,6 +11,8 @@ interface UserRepositoryInterface
 
     public function getByEmail(string $email): ?User;
 
+    public function getUsersByField(array $data): array;
+
     public function save(User $user): User;
 
     public function delete(User $user): bool;

@@ -42,4 +42,15 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::create($userData);
     }
+
+    public function getUsersByField(array $fields): array
+    {
+        $query = User::query();
+
+        foreach ($fields as $field => $value) {
+            $query->where($field, $value);
+        }
+
+        return $query->get()->toArray();
+    }
 }

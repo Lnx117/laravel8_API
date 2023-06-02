@@ -4,4 +4,13 @@
     border-bottom: 1px solid black;
     margin-bottom: 20px;
 }
+
+.appActiveLink {
+    font-weight: 700;
+}
+
+.appPagesLink {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.55) !important;
+}
 /* end Applications */

@@ -52,6 +52,58 @@ class UserController extends Controller
         return $serviceResponse;
     }
 
+    /**
+ * @OA\Post(
+ *      path="/api/sanctum/getUsersByField",
+ *      description="Меняет данные пользователя по его Id или Email",
+ *      tags={"Пользователи"},
+ *      summary="Get users by field",
+ *      security={{"apiAuth":{}}},
+ *      @OA\RequestBody(
+ *          required=true,
+ *          @OA\MediaType(
+ *              mediaType="application/json",
+ *              @OA\Schema(
+ *                  type="object",
+ *                  @OA\Property(
+ *                      property="name",
+ *                      type="string",
+ *                      example="John Doe",
+ *                      description="User name"
+ *                  ),
+ *                  @OA\Property(
+ *                      property="role",
+ *                      type="string",
+ *                      example="master",
+ *                      description="User role"
+ *                  ),
+ *                  @OA\Property(
+ *                      property="email",
+ *                      type="string",
+ *                      example="john.doe@example.com",
+ *                      description="User email"
+ *                  ),
+ *              )
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response=200,
+ *          description="Users founded successfully"
+ *      ),
+ *      @OA\Response(
+ *          response=404,
+ *          description="Users not found"
+ *      )
+ * )
+ */
+    public function getUsersByField(Request $request)
+    {
+        $serviceResponse = $this->usersService->getUsersByField($request);
+
+        return $serviceResponse;
+    }
+
+
 /**
  * @OA\Put(
  *      path="/api/sanctum/updateUserByIdOrEmail/{user}",
@@ -79,6 +131,12 @@ class UserController extends Controller
  *                      type="string",
  *                      example="John Doe",
  *                      description="User name"
+ *                  ),
+ *                  @OA\Property(
+ *                      property="role",
+ *                      type="string",
+ *                      example="master",
+ *                      description="User role"
  *                  ),
  *                  @OA\Property(
  *                      property="email",

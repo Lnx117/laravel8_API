@@ -125,4 +125,49 @@ class ApiUsersRouteTest extends TestCase
         // Проверяем, что пользователь был удален из базы данных
         $this->assertDeleted($this->user);
     }
+
+    public function testGetUsersByField()
+    {
+        $statuses = config('ApiStatus');
+
+        // Создаем фейковые данные для запроса
+        $data = [
+            'user_role' => 'master',
+            'name' => $this->faker->name,
+        ];
+
+        $newUser = User::factory()->create([
+            'user_role' => 'master',
+            'name' => $data['name'],
+        ]);
+        
+        // Создаем тестового пользователя
+        $this->user = User::factory()->create([
+            'user_role' => 'manager',
+        ]);
+
+        // Вызываем метод с идентификатором пользователя
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->post('api/sanctum/getUsersByField/', $data);
+        
+        // Проверяем успешный статус ответа
+        $response->assertStatus(200);
+
+        // $response->assertJsonFragment(
+        //     [
+                // 'user_role' => 'master',
+                // 'name' => $data['name'],
+        //     ],
+        // );
+
+        $response->assertJson([
+            'status' => 'Successfully',
+            'message' => 'Users founded successfully',
+            'data' => [
+                [
+                    'name' => $data['name']
+                ]
+            ]
+        ]);
+    }
 }

@@ -61,6 +61,11 @@ class UsersService implements UsersServiceInterface
         $user = $this->userRepository->fill($user, $request->only([
             'name',
             'email',
+            'user_status',
+            'user_role',
+            'user_firstname',
+            'user_lastname',
+            'user_patronymic',
         ]));
 
         // сохраняем изменения в базу данных
@@ -139,6 +144,33 @@ class UsersService implements UsersServiceInterface
 
         $this->response['data'] = $user;
         $this->response['message'] = 'User deleted successfully';
+        $this->response['status'] = $statuses['ok'];
+
+        return $this->response;
+    }
+
+    public function getUsersByField($request)
+    {
+        $statuses = config('ApiStatus');
+
+        if(is_array($request)) {
+            $data = $request;
+        } else {
+            $data = $request->json()->all();
+        }
+
+        // проверяем, является ли параметр идентификатором пользователя
+        $app = $this->userRepository->getUsersByField($data);
+
+        if (empty($app)) {
+            $this->response['message'] = 'Users not found';
+            $this->response['status'] = $statuses['warning'];
+    
+            return $this->response;
+        }
+
+        $this->response['data'] = $app;
+        $this->response['message'] = 'Users founded successfully';
         $this->response['status'] = $statuses['ok'];
 
         return $this->response;

@@ -26,7 +26,7 @@
                 ],
                 "summary": "Получение списка заявок",
                 "description": "Возвращает список всех заявок.",
-                "operationId": "81e31e182d1331a6a9b25cf6ad6db59a",
+                "operationId": "4d5d15b148f5612aca1d6a2552d1e68b",
                 "responses": {
                     "200": {
                         "description": "Список заявок",
@@ -59,7 +59,7 @@
                 ],
                 "summary": "Update app by ID",
                 "description": "Меняет заявку по ее Id",
-                "operationId": "6628e9fba54c570128c4d8b5d04219f6",
+                "operationId": "55f130597b827703947479220e4cc748",
                 "parameters": [
                     {
                         "name": "id",
@@ -180,7 +180,7 @@
                 ],
                 "summary": "Get app by ID",
                 "description": "Получает заявку по ID",
-                "operationId": "8475e36ac518e64f646e422dcf36e945",
+                "operationId": "aa81cff209725d096f8cf163f2474005",
                 "parameters": [
                     {
                         "name": "id",
@@ -207,6 +207,116 @@
                 ]
             }
         },
+        "/api/sanctum/getApplicationByField": {
+            "post": {
+                "tags": [
+                    "Заявки"
+                ],
+                "summary": "Get app by fields",
+                "description": "Получает заявку по fields",
+                "operationId": "5a5267c0648d896f5a411ce6bcb6c459",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "bitrix_customer_id": {
+                                        "description": "bitrix_customer_id name",
+                                        "type": "string",
+                                        "example": "1221321"
+                                    },
+                                    "customer_first_name": {
+                                        "description": "customer_first_name",
+                                        "type": "string",
+                                        "example": "Владислав"
+                                    },
+                                    "customer_last_name": {
+                                        "description": "customer_last_name",
+                                        "type": "string",
+                                        "example": "Остряков"
+                                    },
+                                    "customer_patronymic": {
+                                        "description": "customer_patronymic",
+                                        "type": "string",
+                                        "example": "Павлович"
+                                    },
+                                    "customer_phone": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "+79128539823"
+                                    },
+                                    "app_city": {
+                                        "description": "app_city",
+                                        "type": "string",
+                                        "example": "Москва"
+                                    },
+                                    "app_street": {
+                                        "description": "app_street",
+                                        "type": "string",
+                                        "example": "Поляны"
+                                    },
+                                    "app_house_number": {
+                                        "description": "app_house_number",
+                                        "type": "string",
+                                        "example": "45"
+                                    },
+                                    "app_house_building": {
+                                        "description": "app_house_building",
+                                        "type": "string",
+                                        "example": "-"
+                                    },
+                                    "app_flat_num": {
+                                        "description": "app_flat_num",
+                                        "type": "string",
+                                        "example": "3598"
+                                    },
+                                    "app_floor_num": {
+                                        "description": "app_floor_num",
+                                        "type": "string",
+                                        "example": "32"
+                                    },
+                                    "app_house_entrance": {
+                                        "description": "app_house_entrance",
+                                        "type": "string",
+                                        "example": "цу"
+                                    },
+                                    "problem_text": {
+                                        "description": "problem_text",
+                                        "type": "string",
+                                        "example": "Все оки)"
+                                    },
+                                    "master_id": {
+                                        "description": "master_id",
+                                        "type": "string",
+                                        "example": "332"
+                                    },
+                                    "app_status": {
+                                        "description": "app_status",
+                                        "type": "string",
+                                        "example": "Принято"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "App founded successfully"
+                    },
+                    "404": {
+                        "description": "App not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/sanctum/deleteApplicationById/{id}": {
             "delete": {
                 "tags": [
@@ -214,7 +324,7 @@
                 ],
                 "summary": "Delete app by ID",
                 "description": "Удаляет заявку по ID",
-                "operationId": "04ea11831b6a7367b3698d247d79d4b8",
+                "operationId": "d4d3411b54f88c408f75c5b7df5d1d86",
                 "parameters": [
                     {
                         "name": "id",
@@ -248,7 +358,7 @@
                 ],
                 "summary": "Create task",
                 "description": "Создает заявку",
-                "operationId": "15029bd880c2d2a850e4b507a3938630",
+                "operationId": "af30861adeb93e686d52d3239bbd30ee",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -358,7 +468,7 @@
                 ],
                 "summary": "Регистрация нового пользователя",
                 "description": "Регистрация нового пользователя с использованием имени, адреса электронной почты и пароля",
-                "operationId": "0f4a9954a4d1a5297af4380586b1039e",
+                "operationId": "242d13eadf8844b723f382a5baedcf86",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -412,7 +522,7 @@
                 ],
                 "summary": "Регистрация менеджера",
                 "description": "Регистрация нового менеджера с использованием имени, адреса электронной почты и пароля",
-                "operationId": "cab70c6d9409d5695fbd2f5c0dc58874",
+                "operationId": "3fadb81d314cb359e68664738748b517",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -466,7 +576,7 @@
                 ],
                 "summary": "Авторизация и получение токена",
                 "description": "Авторизует пользователя по email и паролю и возвращает токен доступа.",
-                "operationId": "51a1a1f07514f6e10815a5bc80d4de0a",
+                "operationId": "8e5eb3f5b28f5f5c4e007b4e84ed471c",
                 "requestBody": {
                     "description": "Данные для авторизации",
                     "required": true,
@@ -540,7 +650,7 @@
                 ],
                 "summary": "Получение списка задач",
                 "description": "Возвращает список всех задач.",
-                "operationId": "9eeefb9a3c536abed885809ec76f499c",
+                "operationId": "08d2dac2e6ab0536471f3f87a89b79d3",
                 "responses": {
                     "200": {
                         "description": "Список задач",
@@ -573,7 +683,7 @@
                 ],
                 "summary": "Update task by ID",
                 "description": "Меняет задачу по ее Id",
-                "operationId": "ec3b0e30aee8e629afd2701b41197a26",
+                "operationId": "090855ec2fbdc9a9d17bb925b0805ab9",
                 "parameters": [
                     {
                         "name": "id",
@@ -634,7 +744,7 @@
                 ],
                 "summary": "Get task by ID",
                 "description": "Получает задачу по ID",
-                "operationId": "5016fa9b0e692f26a993004a4dbaba88",
+                "operationId": "25ff68cdceb88ca570327bd7be0a26e3",
                 "parameters": [
                     {
                         "name": "id",
@@ -668,7 +778,7 @@
                 ],
                 "summary": "Delete task by ID",
                 "description": "Удаляет задачу по ID",
-                "operationId": "786195f6b6416f76a9b9c473eefa0832",
+                "operationId": "ae7606b8a2a03f6a2c2a42bc459bda5a",
                 "parameters": [
                     {
                         "name": "id",
@@ -702,7 +812,7 @@
                 ],
                 "summary": "Create task",
                 "description": "Меняет задачу по ее Id",
-                "operationId": "ec74292f512d858b5b2382f7c4dc0685",
+                "operationId": "0c7eb0832a7a84c29e37ad67dd52fe0a",
                 "parameters": [
                     {
                         "name": "application_id",
@@ -754,7 +864,7 @@
                 ],
                 "summary": "Получение списка пользователей",
                 "description": "Возвращает список всех зарегистрированных пользователей.",
-                "operationId": "25b44080ab77afcf007304a7ae3e2e7f",
+                "operationId": "3a6ba1c4ddb8022f91045cd9fc0246d6",
                 "responses": {
                     "200": {
                         "description": "Список пользователей",
@@ -780,6 +890,56 @@
                 ]
             }
         },
+        "/api/sanctum/getUsersByField": {
+            "post": {
+                "tags": [
+                    "Пользователи"
+                ],
+                "summary": "Get users by field",
+                "description": "Меняет данные пользователя по его Id или Email",
+                "operationId": "b89417cabd19ff3c72f1b75f6a5460ab",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "User name",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "role": {
+                                        "description": "User role",
+                                        "type": "string",
+                                        "example": "master"
+                                    },
+                                    "email": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Users founded successfully"
+                    },
+                    "404": {
+                        "description": "Users not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/sanctum/updateUserByIdOrEmail/{user}": {
             "put": {
                 "tags": [
@@ -787,7 +947,7 @@
                 ],
                 "summary": "Update user by ID or email",
                 "description": "Меняет данные пользователя по его Id или Email",
-                "operationId": "d3b20a7288687a24ac7180f57dfe1d50",
+                "operationId": "56eee5ceaa78421f8eeb78aae208884b",
                 "parameters": [
                     {
                         "name": "user",
@@ -809,6 +969,11 @@
                                         "description": "User name",
                                         "type": "string",
                                         "example": "John Doe"
+                                    },
+                                    "role": {
+                                        "description": "User role",
+                                        "type": "string",
+                                        "example": "master"
                                     },
                                     "email": {
                                         "description": "User email",
@@ -843,7 +1008,7 @@
                 ],
                 "summary": "Get user by ID or email",
                 "description": "Получает конкретного пользователя по ID или email",
-                "operationId": "c7ebee6caac3ab4c1673e28bb06f841b",
+                "operationId": "87512b69b78e1ffe0867617bc118d86b",
                 "parameters": [
                     {
                         "name": "user",
@@ -877,7 +1042,7 @@
                 ],
                 "summary": "Delete user by ID or email",
                 "description": "Удаляет конкретного пользователя по ID или email",
-                "operationId": "e766dc26fab7e4e9b4b3391c7439058f",
+                "operationId": "edc3872a13bd1361f64f3cc7e6c051bd",
                 "parameters": [
                     {
                         "name": "user",
@@ -1054,7 +1219,10 @@
                 "required": [
                     "name",
                     "email",
-                    "password"
+                    "password",
+                    "user_firstname",
+                    "user_lastname",
+                    "user_patronymic"
                 ],
                 "properties": {
                     "name": {
@@ -1073,6 +1241,21 @@
                         "type": "string",
                         "format": "password",
                         "example": "12345678"
+                    },
+                    "user_firstname": {
+                        "description": "Имя пользователя (не менее 3 символов)",
+                        "type": "string",
+                        "example": "Владислав"
+                    },
+                    "user_lastname": {
+                        "description": "Фамилия пользователя (не менее 3 символов)",
+                        "type": "string",
+                        "example": "Остряков"
+                    },
+                    "user_patronymic": {
+                        "description": "Отчество пользователя (не менее 3 символов)",
+                        "type": "string",
+                        "example": "Павлович"
                     }
                 },
                 "type": "object"

@@ -10,4 +10,6 @@ interface UsersServiceInterface
     public function getUserByIdOrEmail($idOrEmail);
 
     public function deleteUserByIdOrEmail($idOrEmail);
+
+    public function getUsersByField(array $request);
 }
