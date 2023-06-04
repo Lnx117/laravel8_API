@@ -12,6 +12,6 @@
                 </div>
             </div>
         </div>
-        <applications-component :applications="{{ json_encode($applications) }}"></applications-component>
+        <applications-component :data="{{ json_encode($data) }}"></applications-component>
     </div>
 @endsection

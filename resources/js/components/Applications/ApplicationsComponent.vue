@@ -17,7 +17,7 @@
                     <div class="card-footer">
                         I'm an example component.
                     </div> -->
-                    <appliactions-item-component :applications="applications"></appliactions-item-component>
+                    <appliactions-item-component :data="data"></appliactions-item-component>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
 import ApplicationItemComponent from './ApplicationItemComponent.vue';
 
     export default {
-        props: ['applications'],
+        props: ['data'],
         components: {
             'appliactions-item-component': ApplicationItemComponent,
         },
@@ -38,7 +38,7 @@ import ApplicationItemComponent from './ApplicationItemComponent.vue';
             };
         },
         mounted() {
-
+            console.log(this);
         },
         watch: {
 

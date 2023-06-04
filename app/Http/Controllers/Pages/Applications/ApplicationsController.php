@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 // use App\Models\User;
 use App\Models\Applications;
 use App\Http\Controllers\Controller;
-use App\Services\ApplicationsService;
+use App\Interfaces\ApplicationsServiceInterface;
+use App\Interfaces\UsersServiceInterface;
 // use Illuminate\Support\Facades\Validator;
 // use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +19,18 @@ class ApplicationsController extends Controller
         'data' => '',
     ];
 
-    public function getApplicationsFreeList(ApplicationsService $applicationsService)
+    protected $appService;
+    protected $usersService;
+
+    //На вход требуем объект, который реализует интерфейс ApplicationsServiceInterface
+    //Он автоматически вернется благодаря сервис провайдеру
+    public function __construct(ApplicationsServiceInterface $appService, UsersServiceInterface $usersService)
+    {
+        $this->appService = $appService;
+        $this->usersService = $usersService;
+    }
+
+    public function getApplicationsFreeList()
     {
         //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
         //В нашем случае ищем те заявки которые в статусе Принято
@@ -27,13 +39,24 @@ class ApplicationsController extends Controller
         ];
 
         //Получаем список задач
-        $serviceResponse = $applicationsService->getByFields($request);
-        $serviceResponse = $serviceResponse['data'];
+        $applications = $this->appService->getByFields($request);
+        $applications = $applications['data'];
 
-        return view('ApplicationsPages/app-page')->with('applications', $serviceResponse);
+        //Получаем список пользователей
+        $masters = [];
+        $free = ['user_status' => 'Свободен'];
+        $working = ['user_status' => 'В работе'];
+        $vacation = ['user_status' => 'В отпуске/выходной'];
+        $masters['free'] = $this->usersService->getUsersByField($free)['data'];
+        $masters['working'] = $this->usersService->getUsersByField($working)['data'];
+        $masters['vacation'] = $this->usersService->getUsersByField($vacation)['data'];
+
+        $data['applications'] = $applications;
+        $data['masters'] = $masters;
+        return view('ApplicationsPages/app-page')->with('data', $data);
     }
 
-    public function getApplicationsWaitList(ApplicationsService $applicationsService)
+    public function getApplicationsWaitList()
     {
         //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
         //В нашем случае ищем те заявки которые в статусе Принято
@@ -42,13 +65,13 @@ class ApplicationsController extends Controller
         ];
 
         //Получаем список задач
-        $serviceResponse = $applicationsService->getByFields($request);
-        $serviceResponse = $serviceResponse['data'];
+        $applications = $this->appService->getByFields($request);
+        $applications = $applications['data'];
 
-        return view('ApplicationsPages/app-page')->with('applications', $serviceResponse);
+        return view('ApplicationsPages/app-page')->with('applications', $applications);
     }
 
-    public function getApplicationsInProgressList(ApplicationsService $applicationsService)
+    public function getApplicationsInProgressList()
     {
         //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
         //В нашем случае ищем те заявки которые в статусе Принято
@@ -57,13 +80,13 @@ class ApplicationsController extends Controller
         ];
 
         //Получаем список задач
-        $serviceResponse = $applicationsService->getByFields($request);
-        $serviceResponse = $serviceResponse['data'];
+        $applications = $this->appService->getByFields($request);
+        $applications = $applications['data'];
 
-        return view('ApplicationsPages/app-page')->with('applications', $serviceResponse);
+        return view('ApplicationsPages/app-page')->with('applications', $applications);
     }
 
-    public function getApplicationsDoneList(ApplicationsService $applicationsService)
+    public function getApplicationsDoneList()
     {
         //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
         //В нашем случае ищем те заявки которые в статусе Принято
@@ -72,10 +95,10 @@ class ApplicationsController extends Controller
         ];
 
         //Получаем список задач
-        $serviceResponse = $applicationsService->getByFields($request);
-        $serviceResponse = $serviceResponse['data'];
+        $applications = $this->appService->getByFields($request);
+        $applications = $applications['data'];
 
-        return view('ApplicationsPages/app-page')->with('applications', $serviceResponse);
+        return view('ApplicationsPages/app-page')->with('applications', $applications);
     }
 
     // public function updateApplicationById(Request $request, ApplicationsService $applicationsService, $id)
