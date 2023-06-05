@@ -5169,20 +5169,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['options'],
+  props: ['options', 'appKey'],
   components: {},
   data: function data() {
     return {
       selectedOption: 'Назначить мастера',
-      showOptions: false
+      showOptions: false,
+      allIsChecked: false,
+      freeIsChecked: true,
+      masterList: this.options['free']
     };
   },
-  mounted: function mounted() {},
-  watch: {},
+  mounted: function mounted() {
+    console.log(this.appKey);
+  },
+  watch: {
+    freeIsChecked: function freeIsChecked(newVal) {
+      this.allIsChecked = !newVal;
+      if (newVal == true) {
+        this.masterList = this.options['free'];
+      }
+    },
+    allIsChecked: function allIsChecked(newVal) {
+      this.freeIsChecked = !newVal;
+      if (newVal == true) {
+        this.masterList = this.options['working'];
+      }
+    }
+  },
   methods: {
-    openOptions: function openOptions() {
+    openCloseOptions: function openCloseOptions() {
+      this.showOptions = !this.showOptions;
+    },
+    selectChoose: function selectChoose(event) {
+      this.selectedOption = event.target.textContent;
       this.showOptions = !this.showOptions;
     }
   }
@@ -28448,7 +28480,10 @@ var render = function () {
                 { staticClass: "col-md-4" },
                 [
                   _c("select-master-component", {
-                    attrs: { options: _vm.data["masters"]["free"] },
+                    attrs: {
+                      options: _vm.data["masters"],
+                      appKey: application.id,
+                    },
                   }),
                 ],
                 1
@@ -28525,41 +28560,151 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", {}, [
-    _c(
-      "p",
-      {
-        staticClass: "v-select",
+    _c("div", [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.freeIsChecked,
+            expression: "freeIsChecked",
+          },
+        ],
+        staticClass: "custom-checkbox",
+        attrs: {
+          type: "checkbox",
+          id: "checkbox_free_id_" + _vm.appKey,
+          name: "checkbox_free_id_" + _vm.appKey,
+          value: "yes",
+        },
+        domProps: {
+          checked: Array.isArray(_vm.freeIsChecked)
+            ? _vm._i(_vm.freeIsChecked, "yes") > -1
+            : _vm.freeIsChecked,
+        },
         on: {
-          click: function ($event) {
-            return _vm.openOptions()
+          change: function ($event) {
+            var $$a = _vm.freeIsChecked,
+              $$el = $event.target,
+              $$c = $$el.checked ? true : false
+            if (Array.isArray($$a)) {
+              var $$v = "yes",
+                $$i = _vm._i($$a, $$v)
+              if ($$el.checked) {
+                $$i < 0 && (_vm.freeIsChecked = $$a.concat([$$v]))
+              } else {
+                $$i > -1 &&
+                  (_vm.freeIsChecked = $$a
+                    .slice(0, $$i)
+                    .concat($$a.slice($$i + 1)))
+              }
+            } else {
+              _vm.freeIsChecked = $$c
+            }
           },
         },
-      },
-      [_vm._v(_vm._s(_vm.selectedOption))]
-    ),
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "checkbox_free_id_" + _vm.appKey } }, [
+        _vm._v("Свободные мастера"),
+      ]),
+    ]),
     _vm._v(" "),
-    _vm.showOptions
-      ? _c(
-          "div",
-          { staticClass: "v-select" },
-          _vm._l(_vm.options, function (option) {
-            return _c(
-              "p",
-              {
-                staticClass: "option",
-                attrs: { "v-model": _vm.selectedOption },
-              },
-              [
-                _vm._v(
-                  " " +
-                    _vm._s(option.user_lastname + " " + option.user_firstname)
-                ),
-              ]
-            )
-          }),
-          0
-        )
-      : _vm._e(),
+    _c("div", [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.allIsChecked,
+            expression: "allIsChecked",
+          },
+        ],
+        staticClass: "custom-checkbox",
+        attrs: {
+          type: "checkbox",
+          id: "checkbox_not_free_id_" + _vm.appKey,
+          name: "checkbox_not_free_id_" + _vm.appKey,
+          value: "yes",
+        },
+        domProps: {
+          checked: Array.isArray(_vm.allIsChecked)
+            ? _vm._i(_vm.allIsChecked, "yes") > -1
+            : _vm.allIsChecked,
+        },
+        on: {
+          change: function ($event) {
+            var $$a = _vm.allIsChecked,
+              $$el = $event.target,
+              $$c = $$el.checked ? true : false
+            if (Array.isArray($$a)) {
+              var $$v = "yes",
+                $$i = _vm._i($$a, $$v)
+              if ($$el.checked) {
+                $$i < 0 && (_vm.allIsChecked = $$a.concat([$$v]))
+              } else {
+                $$i > -1 &&
+                  (_vm.allIsChecked = $$a
+                    .slice(0, $$i)
+                    .concat($$a.slice($$i + 1)))
+              }
+            } else {
+              _vm.allIsChecked = $$c
+            }
+          },
+        },
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "checkbox_not_free_id_" + _vm.appKey } }, [
+        _vm._v("Занятые мастера"),
+      ]),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "v-select-form" }, [
+      _c(
+        "p",
+        {
+          staticClass: "v-select",
+          on: {
+            click: function ($event) {
+              return _vm.openCloseOptions()
+            },
+          },
+        },
+        [_vm._v(_vm._s(_vm.selectedOption))]
+      ),
+      _vm._v(" "),
+      _vm.showOptions
+        ? _c(
+            "div",
+            { staticClass: "v-select v-select-open scrollable-container" },
+            _vm._l(_vm.masterList, function (master) {
+              return _c(
+                "p",
+                {
+                  staticClass: "option",
+                  attrs: { "v-model": _vm.selectedOption },
+                  on: {
+                    click: function ($event) {
+                      return _vm.selectChoose($event)
+                    },
+                  },
+                },
+                [
+                  _vm._v(
+                    " " +
+                      _vm._s(
+                        master.user_lastname + " " + master.user_firstname
+                      ) +
+                      " "
+                  ),
+                ]
+              )
+            }),
+            0
+          )
+        : _vm._e(),
+    ]),
   ])
 }
 var staticRenderFns = []
