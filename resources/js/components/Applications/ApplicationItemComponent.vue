@@ -12,7 +12,7 @@
                         <p>Телефонный номер клиента: <strong>{{ application.customer_phone }}</strong></p>
                     </div>
                     <div class="col-md-4">
-                        <select-master-component :options="data['masters']" :appKey="application.id"></select-master-component>
+                        <select-master-component :options="data['masters']" :appKey="application.id" :token="data['token']"></select-master-component>
                     </div>
                 </div>
             </div>

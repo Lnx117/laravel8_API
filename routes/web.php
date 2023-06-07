@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\Pages\Applications\ApplicationsController;
 use App\Http\Controllers\Pages\Users\UsersController;
-
+use App\Http\Controllers\Pages\Auth\NewLoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/login', [NewLoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [NewLoginController::class, 'login']);
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //Тестовая страница

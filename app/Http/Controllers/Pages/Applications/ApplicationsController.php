@@ -38,6 +38,10 @@ class ApplicationsController extends Controller
             'app_status' => 'Принято'
         ];
 
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
         //Получаем список задач
         $applications = $this->appService->getByFields($request);
         $applications = $applications['data'];
@@ -53,6 +57,8 @@ class ApplicationsController extends Controller
 
         $data['applications'] = $applications;
         $data['masters'] = $masters;
+        $data['token'] = $token;
+        
         return view('ApplicationsPages/app-page')->with('data', $data);
     }
 

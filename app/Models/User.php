@@ -63,4 +63,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // метод для записи роли пользователя в сессию
+    public function markFirstLogin()
+    {
+        session(['user_role' => $this->user_role]);
+
+    }
 }

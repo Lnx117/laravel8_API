@@ -14,4 +14,7 @@
         </div>
         <applications-component :data="{{ json_encode($data) }}"></applications-component>
     </div>
+    <?php 
+        //var_dump($data);
+    ?>
 @endsection
