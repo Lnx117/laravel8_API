@@ -8,6 +8,7 @@
             <input type="checkbox" class="custom-checkbox" :id="'checkbox_not_free_id_' + appKey" :name="'checkbox_not_free_id_' + appKey" value="yes" v-model="workingMasters">
             <label :for="'checkbox_not_free_id_' + appKey">Занятые мастера</label>
         </div>
+        <br>
         <div class="v-select-form">
             <p
             @click="openCloseOptions()" :id="masterId" class="v-select">{{ selectedOption }}</p>
@@ -21,6 +22,17 @@
                 <!-- Код спиннера или другого изображения прелоадера -->
             </div>
         </div>
+
+        <div v-if="showPopUp" class="appPopUpBlock-overlay" :class="{ active: showPopUp }">
+            <div class="appPopUpBlock">
+                <div><strong>{{ PopUpMessage }}</strong></div>
+                <br>
+                <div class="button" @click="closePopUpMessage">
+                    ЗАКРЫТЬ
+                </div>
+            </div>
+        </div>
+
         <div v-if="!buttonBlock" class="button" @click="selectMaster">
             Назначить мастера
         </div>
@@ -48,10 +60,12 @@ export default {
             showLoader: false,
             masterId: -1,
             buttonBlock: true,
+            showPopUp: false,
+            PopUpMessage: '',
         };
     },
     mounted() {
-
+        document.addEventListener('click', this.handleClickOutside);
     },
     watch: {
         //Изначально мастер не назначен (id = -1) и кнопка в блоке, когда назначаем мастера - кнопка разблокируется
@@ -64,6 +78,10 @@ export default {
         },
         //При нажатии на чекбокс Свободные мастера - делаем запрос и получаем актуальный список
         freeIsChecked(newVal) {
+            //Сбрасываем предыдущий выбор мастера
+            this.selectedOption = 'Назначить мастера';
+            this.masterId = -1;
+            
             this.workingMasters = !newVal;
             let free = {
                 user_status: 'Свободен',
@@ -75,6 +93,10 @@ export default {
         },
         //При нажатии на чекбокс Занятые мастера - делаем запрос и получаем актуальный список
         workingMasters(newVal) {
+            //Сбрасываем предыдущий выбор мастера
+            this.selectedOption = 'Назначить мастера';
+            this.masterId = -1;
+
             this.freeIsChecked = !newVal;
             let workingMasters = {
                 user_status: 'В работе',
@@ -92,9 +114,23 @@ export default {
             this.showLoader = true;
             this.createTaskForMaster('/api/sanctum/createTask/' + this.appKey + '/' + this.masterId + '/created');
         },
+        handleClickOutside(event) {
+            let targetElement = event.target;
+
+            // Проверяем, является ли целевой элемент элементом с классом "v-select" или "option"
+            if (
+            !targetElement.closest('.v-select') &&
+            !targetElement.closest('.option')
+            ) {
+                this.showOptions = false;
+            }
+        },
         //Метод для показа/скрытия опций у выпадашки
         openCloseOptions() {
             this.showOptions = !this.showOptions;
+        },
+        closePopUpMessage() {
+            this.showPopUp = false;
         },
         //Метод обновляет текущего мастера для обновления. Если выбрали из выпадашки, то впишет правильный текст в селектор
         //и обновит masterId в data
@@ -141,8 +177,9 @@ export default {
             })
             .catch(error => {
                 // Обработка ошибки
-                console.log("Create Task error");
                 this.showLoader = false;
+                this.PopUpMessage = "Ошибка при создании задачи по заявке. Пропробуйте позже или свяжитесь с технической поддержкой";
+                this.showPopUp = true;
             });
         },
         //Метод обновления заявки (ставим ей статус и номер мастера), а также если все ок, то потом обновляем и мастера
@@ -163,8 +200,9 @@ export default {
             })
             .catch(error => {
                 // Обработка ошибки
-                console.log("Update app error");
                 this.showLoader = false;
+                this.PopUpMessage = "Ошибка при обновлении заявки. Была создана задача, но не назначена мастеру и не отображена в заявке. Пропробуйте позже или свяжитесь с технической поддержкой";
+                this.showPopUp = true;
             });
         },
         //Метод создания задачи для мастера по id заявки и id мастера. Статус задачи будет Принято
@@ -195,8 +233,9 @@ export default {
             })
             .catch(error => {
                 // Обработка ошибки
-                console.log("Get master error");
                 this.showLoader = false;
+                this.PopUpMessage = "Ошибка при попытке получить данные мастера. По заявке была создана задача и номер задачи с номером мастера были отображены в заявке, но задача не назначена мастеру. Пропробуйте позже или свяжитесь с технической поддержкой";
+                this.showPopUp = true;
             });
         },
         //Метод обновления мастера(добавляем ему задачи в очередь)
@@ -210,12 +249,17 @@ export default {
             .then(response => {
                 // Обработка успешного ответа
                 this.showLoader = false;
+                //Событие на удаление отработанной заявки со страницы
+                this.PopUpMessage = "Заявление принято в работу. Задача создана и поставлена мастеру.";
+                this.showPopUp = true;
+                this.$emit('show-popUp', this.PopUpMessage);
                 this.$emit('assign-master', this.appKey);
             })
             .catch(error => {
                 // Обработка ошибки
-                console.log("updateMasterFetch error");
                 this.showLoader = false;
+                this.PopUpMessage = "Ошибка при назначении задачи мастеру. По заявке была создана задача и номер задачи с номером мастера были отображены в заявке, но задача не назначена мастеру. Пропробуйте позже или свяжитесь с технической поддержкой";
+                this.showPopUp = true;
             });
         },
     }
