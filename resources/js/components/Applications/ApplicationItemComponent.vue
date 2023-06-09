@@ -2,7 +2,7 @@
     <div class="container">
         <div class="col-md-12">
             <div class="card-body">
-                <div v-for="application in data.applications" :key="application.id" class="col-md-12 appItemcard">
+                <div v-for="application in data.applications" :key="application.id" :id="'app' + application.id" class="col-md-12 appItemcard">
                     <div class="col-md-8">
                         <p>Фио клиента: <strong>{{ application.customer_last_name + ' ' + application.customer_first_name 
                         + ' ' + application.customer_patronymic  }}</strong></p>
@@ -12,7 +12,12 @@
                         <p>Телефонный номер клиента: <strong>{{ application.customer_phone }}</strong></p>
                     </div>
                     <div class="col-md-4">
-                        <select-master-component :options="data['masters']" :appKey="application.id" :token="data['token']"></select-master-component>
+                        <select-master-component 
+                            :options="data['masters']" 
+                            :appKey="application.id" 
+                            :token="data['token']"
+                            @assign-master="removeApplication">
+                        </select-master-component>
                     </div>
                 </div>
             </div>
@@ -38,5 +43,11 @@ import SelectComponent from './SelectComponent.vue';
         watch: {
 
         },
+        methods: {
+            removeApplication(appKey) {
+                // Удалить заявку из списка по appKey
+                document.querySelector('#app'+ appKey).style.display = "none";
+            }
+        }
     }
 </script>
