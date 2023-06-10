@@ -41,7 +41,6 @@ import SelectComponent from './SelectComponent.vue';
         props: ['data'],
         data() {
             return {
-                message: 'Привет',
                 showPopUp: false,
                 PopUpMessage: '',
             };

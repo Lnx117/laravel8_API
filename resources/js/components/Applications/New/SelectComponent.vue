@@ -172,6 +172,7 @@ export default {
                 let appUpdate = {
                     app_status: 'Назначена',
                     master_id: this.masterId,
+                    task_id: response.data.data.id,
                 };
                 this.updateAppFetch('/api/sanctum/updateApplicationById/' + this.appKey, appUpdate, response.data.data.id);
             })
