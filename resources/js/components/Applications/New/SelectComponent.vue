@@ -112,8 +112,14 @@ export default {
         //ПО цепочке сначала создаем задачу, далее обновляем заявку, если все ок, то обновляем очередь мастеру
         selectMaster() {
             this.showLoader = true;
-            this.createTaskForMaster('/api/sanctum/createTask/' + this.appKey + '/' + this.masterId + '/created');
+            //Если все ок и задача создана, то обновляем заявку
+            let appUpdate = {
+                app_status: 'Назначена',
+                master_id: this.masterId,
+            };
+            this.updateAppFetch('/api/sanctum/updateApplicationById/' + this.appKey, appUpdate);
         },
+        //клик вне зоны селектора закрывает селектор
         handleClickOutside(event) {
             let targetElement = event.target;
 
@@ -158,33 +164,8 @@ export default {
                 this.showLoader = false;
             });
         },
-        //Метод создания задачи для мастера по id заявки и id мастера. Статус задачи будет Принято
-        createTaskForMaster(url) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
-            axios.get(url, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                // Обработка успешного ответа
-                //Если все ок и задача создана, то обновляем заявку
-                let appUpdate = {
-                    app_status: 'Назначена',
-                    master_id: this.masterId,
-                    task_id: response.data.data.id,
-                };
-                this.updateAppFetch('/api/sanctum/updateApplicationById/' + this.appKey, appUpdate, response.data.data.id);
-            })
-            .catch(error => {
-                // Обработка ошибки
-                this.showLoader = false;
-                this.PopUpMessage = "Ошибка при создании задачи по заявке. Пропробуйте позже или свяжитесь с технической поддержкой";
-                this.showPopUp = true;
-            });
-        },
         //Метод обновления заявки (ставим ей статус и номер мастера), а также если все ок, то потом обновляем и мастера
-        updateAppFetch(url, fields, task) {
+        updateAppFetch(url, fields) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
             axios.put(url, fields, {
                 headers: {
@@ -197,7 +178,7 @@ export default {
 
                 //Получаем мастера
                 // //Добавить поле очереди и обновлять его
-                this.getMasterById('/api/sanctum/getUserByIdOrEmail/' + this.masterId, task);
+                this.getMasterById('/api/sanctum/getUserByIdOrEmail/' + this.masterId);
             })
             .catch(error => {
                 // Обработка ошибки
@@ -207,7 +188,7 @@ export default {
             });
         },
         //Метод создания задачи для мастера по id заявки и id мастера. Статус задачи будет Принято
-        getMasterById(url, task) {
+        getMasterById(url) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
             axios.get(url, {
                 headers: {
@@ -218,16 +199,16 @@ export default {
                 // Обработка успешного ответа
                 //Если получили мастера то обновляем его, вставляем ему новую задачу в очередь
                 let master = response.data;
-                let taskIds = [];
+                let appIds = [];
 
-                if (master.data.task_ids !== undefined && master.data.task_ids !== null && master.data.task_ids !== "") {
-                    taskIds = JSON.parse(master.data.task_ids);
+                if (master.data.app_ids !== undefined && master.data.app_ids !== null && master.data.app_ids !== "") {
+                    appIds = JSON.parse(master.data.app_ids);
                 };
 
-                taskIds.push(task);
+                appIds.push(this.appKey);
 
                 let masterUpdateData = {
-                    task_ids: JSON.stringify(taskIds),
+                    app_ids: JSON.stringify(appIds),
                 };
                 this.updateMasterFetch('/api/sanctum/updateUserByIdOrEmail/' + this.masterId, masterUpdateData);
 

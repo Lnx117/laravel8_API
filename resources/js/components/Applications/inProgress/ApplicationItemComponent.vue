@@ -4,6 +4,7 @@
             <div class="card-body">
                 <div v-for="application in data.applications" :key="application.id" :id="'app' + application.id" class="col-md-12 appItemcard">
                     <div class="col-md-8">
+                        <p>Номер заявки: <strong>{{ application.id }}</strong></p>
                         <p>Фио клиента: <strong>{{ application.customer_last_name + ' ' + application.customer_first_name 
                         + ' ' + application.customer_patronymic  }}</strong></p>
                         <p>Адрес клиента: <strong>{{ "город " + application.app_city + ', улица ' + application.app_street 
@@ -12,7 +13,6 @@
                         <p>Телефонный номер клиента: <strong>{{ application.customer_phone }}</strong></p>
                         <p>Статус заявки: <strong>{{ application.app_status }}</strong></p>
                         <p>Назначена мастеру: <strong>{{ application.master_id }}</strong></p>
-                        <p>Номер задачи: <strong>{{ application.task_id }}</strong></p>
                     </div>
                     <div class="col-md-4">
                         <select-master-component 
@@ -20,8 +20,6 @@
                             :prev_master_id="application.master_id"
                             :appKey="application.id" 
                             :token="data['token']"
-                            :task_id="application.task_id"
-                            @assign-master="removeApplication"
                             @show-popUp="showPopUpMethod">
                         </select-master-component>
                     </div>
@@ -62,10 +60,6 @@ import SelectComponent from './SelectComponent.vue';
         methods: {
             closePopUpMessage() {
                 this.showPopUp = false;
-            },
-            removeApplication(appKey) {
-                // получить заявку и обновить ее в applications
-                
             },
             showPopUpMethod(PopUpMessage) {
                 this.PopUpMessage = "Заявление принято в работу. Задача создана и поставлена мастеру.";

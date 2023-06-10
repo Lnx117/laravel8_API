@@ -46,7 +46,7 @@
 import axios from 'axios';
 
 export default {
-    props: ['options', 'prev_master_id', 'appKey','token', 'task_id'],
+    props: ['options', 'prev_master_id', 'appKey','token'],
     components: {
 
     },
@@ -62,7 +62,6 @@ export default {
             buttonBlock: true,
             showPopUp: false,
             PopUpMessage: '',
-            NewTask: '',
         };
     },
     mounted() {
@@ -113,7 +112,11 @@ export default {
         //ПО цепочке сначала создаем задачу, далее обновляем заявку, если все ок, то обновляем очередь мастеру
         selectMaster() {
             this.showLoader = true;
-            this.createTaskForMaster('/api/sanctum/createTask/' + this.appKey + '/' + this.masterId + '/created');
+            let appUpdate = {
+                app_status: 'Назначена',
+                master_id: this.masterId,
+            };
+            this.updateAppFetch('/api/sanctum/updateApplicationById/' + this.appKey, appUpdate);
         },
         handleClickOutside(event) {
             let targetElement = event.target;
@@ -159,33 +162,6 @@ export default {
                 this.showLoader = false;
             });
         },
-        //Метод создания задачи для мастера по id заявки и id мастера. Статус задачи будет Принято
-        createTaskForMaster(url) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
-            axios.get(url, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                // Обработка успешного ответа
-                //Если все ок и задача создана, то обновляем заявку
-                this.NewTask = response.data.data.id;
-                let appUpdate = {
-                    app_status: 'Назначена',
-                    master_id: this.masterId,
-                    task_id: response.data.data.id,
-                };
-                this.updateAppFetch('/api/sanctum/updateApplicationById/' + this.appKey, appUpdate);
-            })
-            .catch(error => {
-                // Обработка ошибки
-                console.log(1);
-                this.showLoader = false;
-                this.PopUpMessage = "Ошибка при создании задачи по заявке. Пропробуйте позже или свяжитесь с технической поддержкой";
-                this.showPopUp = true;
-            });
-        },
         //Метод обновления заявки (ставим ей статус и номер мастера), а также если все ок, то потом обновляем и мастера
         updateAppFetch(url, fields) {
             axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
@@ -223,19 +199,19 @@ export default {
                 // Обработка успешного ответа
                 //Если получили мастера то обновляем его, вставляем ему новую задачу в очередь
                 let master = response.data;
-                let taskIds = [];
+                let appIds = [];
 
                 //удаляем старую задачу у старого исполнителя
-                if (master.data.task_ids !== undefined && master.data.task_ids !== null && master.data.task_ids !== "") {
-                    taskIds = JSON.parse(master.data.task_ids);
-                    let index = taskIds.indexOf(this.task_id);
+                if (master.data.app_ids !== undefined && master.data.app_ids !== null && master.data.app_ids !== "") {
+                    appIds = JSON.parse(master.data.app_ids);
+                    let index = appIds.indexOf(this.appKey);
                     if (index > -1) {
-                        taskIds.splice(index, 1);
+                        appIds.splice(index, 1);
                     }
                 };
 
                 let masterUpdateData = {
-                    task_ids: JSON.stringify(taskIds),
+                    app_ids: JSON.stringify(appIds),
                 };
                 this.updatePrevMaster('/api/sanctum/updateUserByIdOrEmail/' + this.prev_master_id, masterUpdateData);
 
@@ -258,8 +234,8 @@ export default {
             })
             .then(response => {
                 // Обработка успешного ответа
-                //Удаляем предыдущую задачу из задач
-                this.deletePrevTask('/api/sanctum/deleteTaskById/' + this.task_id);
+                //Добавить поле очереди и обновлять его у нвого мастера
+                this.getMasterById('/api/sanctum/getUserByIdOrEmail/' + this.masterId);
                 
 
             })
@@ -268,28 +244,6 @@ export default {
                 console.log(4);
                 this.showLoader = false;
                 this.PopUpMessage = "Ошибка при попытке получить данные предыдущего мастера. По заявке была создана задача и номер задачи с номером мастера были отображены в заявке, но задача не назначена мастеру. Пропробуйте позже или свяжитесь с технической поддержкой";
-                this.showPopUp = true;
-            });
-        },
-        //Метод создания задачи для мастера по id заявки и id мастера. Статус задачи будет Принято
-        deletePrevTask(url) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
-            axios.delete(url, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                // Обработка успешного ответа
-                //Добавить поле очереди и обновлять его у нвого мастера
-                this.getMasterById('/api/sanctum/getUserByIdOrEmail/' + this.masterId);
-
-            })
-            .catch(error => {
-                // Обработка ошибки
-                console.log(5);
-                this.showLoader = false;
-                this.PopUpMessage = "Ошибка при попытке удалить предыдущую задачу мастера. По заявке была создана задача и номер задачи с номером мастера были отображены в заявке, но задача не назначена мастеру. Пропробуйте позже или свяжитесь с технической поддержкой";
                 this.showPopUp = true;
             });
         },
@@ -305,16 +259,16 @@ export default {
                 // Обработка успешного ответа
                 //Если получили мастера то обновляем его, вставляем ему новую задачу в очередь
                 let master = response.data;
-                let taskIds = [];
+                let appIds = [];
 
-                if (master.data.task_ids !== undefined && master.data.task_ids !== null && master.data.task_ids !== "") {
-                    taskIds = JSON.parse(master.data.task_ids);
+                if (master.data.app_ids !== undefined && master.data.app_ids !== null && master.data.app_idsv !== "") {
+                    appIds = JSON.parse(master.data.app_ids);
                 };
 
-                taskIds.push(this.NewTask);
+                appIds.push(this.appKey);
 
                 let masterUpdateData = {
-                    task_ids: JSON.stringify(taskIds),
+                    app_ids: JSON.stringify(appIds),
                 };
                 this.updateMasterFetch('/api/sanctum/updateUserByIdOrEmail/' + this.masterId, masterUpdateData);
 
@@ -341,7 +295,7 @@ export default {
                 //Событие на удаление отработанной заявки со страницы
                 this.PopUpMessage = "Заявление принято в работу. Задача создана и поставлена мастеру.";
                 this.$emit('show-popUp', this.PopUpMessage);
-                this.$emit('assign-master', this.appKey);
+                window.location.reload();
             })
             .catch(error => {
                 // Обработка ошибки
