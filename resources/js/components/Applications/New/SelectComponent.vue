@@ -39,6 +39,19 @@
         <div v-else class="buttonDisabled">
             Назначить мастера
         </div>
+        <div class="deleteApp" @click="deleteAppFunc"></div>
+        <div v-if="deleteApp" class="appPopUpBlock-overlay" :class="{ active: deleteApp }">
+            <div class="appPopUpBlock">
+                <div><strong>Вы уверены что хотите удалить заявку?</strong></div>
+                <br>
+                <div class="button" @click="agreeDeleteApp">
+                    ДА
+                </div>
+                <div class="button" @click="closeDeleteApp">
+                    НЕТ
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -62,6 +75,7 @@ export default {
             buttonBlock: true,
             showPopUp: false,
             PopUpMessage: '',
+            deleteApp: false,
         };
     },
     mounted() {
@@ -108,6 +122,41 @@ export default {
         },
     },
     methods: {
+        deleteAppFunc() {
+            this.deleteApp = true;
+        },
+        closeDeleteApp() {
+            this.deleteApp = false;
+        },
+        agreeDeleteApp() {
+            console.log(this.appKey);
+            this.showLoader = true;
+            let appUpdate = {
+                app_status: 'Удалена',
+                master_id: "",
+            };
+            let url = '/api/sanctum/updateApplicationById/' + this.appKey;
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+            axios.put(url, appUpdate, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Обработка успешного ответа
+                this.showLoader = false;
+                this.deleteApp = false;
+                this.PopUpMessage = "Заявка удалена!";
+                this.showPopUp = true;
+            })
+            .catch(error => {
+                // Обработка ошибки
+                this.showLoader = false;
+                this.PopUpMessage = "Ошибка при удалении заявки";
+                this.showPopUp = true;
+            });
+        },
         //Метод при нажатии на кнопку Назначить мастера
         //ПО цепочке сначала создаем задачу, далее обновляем заявку, если все ок, то обновляем очередь мастеру
         selectMaster() {
@@ -137,6 +186,7 @@ export default {
         },
         closePopUpMessage() {
             this.showPopUp = false;
+            window.location.reload();
         },
         //Метод обновляет текущего мастера для обновления. Если выбрали из выпадашки, то впишет правильный текст в селектор
         //и обновит masterId в data
@@ -148,7 +198,7 @@ export default {
         //Метод обновления списка свободных или занятых мастеров для выпадашки при переключении чекбоксов
         selectMasterFetch(url, fields) {
             this.showLoader = true;
-            axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
             axios.post(url, fields, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -166,7 +216,7 @@ export default {
         },
         //Метод обновления заявки (ставим ей статус и номер мастера), а также если все ок, то потом обновляем и мастера
         updateAppFetch(url, fields) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
             axios.put(url, fields, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -189,7 +239,7 @@ export default {
         },
         //Метод создания задачи для мастера по id заявки и id мастера. Статус задачи будет Принято
         getMasterById(url) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
             axios.get(url, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -222,7 +272,7 @@ export default {
         },
         //Метод обновления мастера(добавляем ему задачи в очередь)
         updateMasterFetch(url, fields) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${'6|fq7N0YKEqtAQibA9xNgPopCj8pATEhOsl1T9BB0a'}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
             axios.put(url, fields, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -233,9 +283,7 @@ export default {
                 this.showLoader = false;
                 //Событие на удаление отработанной заявки со страницы
                 this.PopUpMessage = "Заявление принято в работу. Задача создана и поставлена мастеру.";
-                this.showPopUp = true;
                 this.$emit('show-popUp', this.PopUpMessage);
-                this.$emit('assign-master', this.appKey);
             })
             .catch(error => {
                 // Обработка ошибки

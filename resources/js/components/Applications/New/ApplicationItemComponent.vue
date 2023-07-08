@@ -17,6 +17,7 @@
                             :options="data['masters']" 
                             :appKey="application.id" 
                             :token="data['token']"
+                            style="position: relative;"
                             @assign-master="removeApplication"
                             @show-popUp="showPopUpMethod">
                         </select-master-component>
@@ -58,15 +59,16 @@ import SelectComponent from './SelectComponent.vue';
         methods: {
             closePopUpMessage() {
                 this.showPopUp = false;
+                window.location.reload();
             },
             removeApplication(appKey) {
                 // Удалить заявку из списка по appKey
                 document.querySelector('#app'+ appKey).style.display = "none";
             },
             showPopUpMethod(PopUpMessage) {
-                this.PopUpMessage = "Заявление принято в работу. Задача создана и поставлена мастеру.";
+                this.PopUpMessage = PopUpMessage;
                 this.showPopUp = true;
-            }
+            },
         }
     }
 </script>
