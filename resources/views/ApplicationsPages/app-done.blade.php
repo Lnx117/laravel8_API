@@ -3,9 +3,8 @@
 @section('content')
     <div id="app">
         @include('ApplicationsPages/appNavPanel')
-        <applications-component :data="{{ json_encode($data) }}"></applications-component>
+        <applications-done-component :data="{{ json_encode($data) }}"></applications-done-component>
     </div>
     <?php 
-        //var_dump($data);
     ?>
 @endsection

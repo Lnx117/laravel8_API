@@ -57,7 +57,6 @@ class UsersService implements UsersServiceInterface
             return $this->response;
         }
         // заполняем модель только теми полями, которые пришли в запросе
-        // пока обновляем либо имя, либо пароль
         $user = $this->userRepository->fill($user, $request->only([
             'name',
             'email',
@@ -66,6 +65,7 @@ class UsersService implements UsersServiceInterface
             'user_firstname',
             'user_lastname',
             'user_patronymic',
+            'app_ids',
         ]));
 
         // сохраняем изменения в базу данных

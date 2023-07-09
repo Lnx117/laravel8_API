@@ -39,6 +39,10 @@ Route::get('/app/inProgress', [ApplicationsController::class, 'getApplicationsIn
 
 Route::get('/app/done', [ApplicationsController::class, 'getApplicationsDoneList'])->middleware('auth')->name('app.done');
 
+Route::get('/app/deleted', [ApplicationsController::class, 'getApplicationsDeletedList'])->middleware('auth')->name('app.deleted');
+
+Route::get('/app/create', [ApplicationsController::class, 'getApplicationsCreateList'])->middleware('auth')->name('app.create');
+
 //Страница пользователей
 Route::get('/users/free', [UsersController::class, 'getFreeUsersList'])->middleware('auth')->name('users.free');
 

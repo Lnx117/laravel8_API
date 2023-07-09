@@ -20,6 +20,7 @@
                             :prev_master_id="application.master_id"
                             :appKey="application.id" 
                             :token="data['token']"
+                            style="position: relative;"
                             @show-popUp="showPopUpMethod">
                         </select-master-component>
                     </div>
@@ -59,7 +60,9 @@ import SelectComponent from './SelectComponent.vue';
         },
         methods: {
             closePopUpMessage() {
+                //При нажатии закрыть на модалке, убираем ее и релоудим страницу
                 this.showPopUp = false;
+                window.location.reload();
             },
             showPopUpMethod(PopUpMessage) {
                 this.PopUpMessage = "Заявление принято в работу. Задача создана и поставлена мастеру.";

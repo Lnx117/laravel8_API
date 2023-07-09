@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Users\UserController;
-use App\Http\Controllers\API\Task\TaskController;
 use App\Http\Controllers\API\Applications\ApplicationsController;
 
 // use App\Http\Controllers\AppController;
@@ -44,15 +43,6 @@ Route::middleware(['auth:sanctum','checkAdminOrManagerRole'])->prefix('sanctum')
     Route::put('updateUserByIdOrEmail/{user}', [UserController::class, 'updateUserByIdOrEmail']);
     Route::get('getUserByIdOrEmail/{user}', [UserController::class, 'getUserByIdOrEmail']);
     Route::delete('deleteUserByIdOrEmail/{user}', [UserController::class, 'deleteUserByIdOrEmail']);
-});
-
-//Work with tasks
-Route::middleware(['auth:sanctum'])->prefix('sanctum')->namespace('task')->group(function() {
-    Route::get('createTask/{application_id}/{master_id}/{status}', [TaskController::class, 'createTask']);
-    Route::get('getTasksList', [TaskController::class, 'getTasksList']);
-    Route::put('updateTaskById/{id}', [TaskController::class, 'updateTaskById']);
-    Route::get('getTaskById/{id}', [TaskController::class, 'getTaskById']);
-    Route::delete('deleteTaskById/{id}', [TaskController::class, 'deleteTaskById']);
 });
 
 //Work with applications

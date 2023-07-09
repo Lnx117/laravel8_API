@@ -12,6 +12,7 @@
 .appPagesLink {
     text-decoration: none;
     color: rgba(0, 0, 0, 0.55) !important;
+    margin-right: 20px;
 }
 
 /* select */
@@ -19,17 +20,18 @@
     width: 100%;
     border: 1px solid  rgba(0, 0, 0, 0.55);
     border-radius: 25px;
-    padding: 5px 5px;
+    padding: 7px 20px;
 }
 
 .v-select-open {
-    top: 40px;
+    top: 45px;
     position: absolute;
     background-color: white;
 }
 
 .v-select-form {
     position: relative;
+    cursor: pointer;
 }
 
 .option:hover{
@@ -175,4 +177,111 @@
       transform: rotate(360deg);
     }
   }
+
+  .appPopUpBlock-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Отключаем события клика на самом оверлее */
+  }
+  
+  .appPopUpBlock-overlay.active {
+    pointer-events: auto; /* Включаем события клика на активном оверлее */
+    overflow: hidden; /* Отключаем прокрутку страницы */
+  }
+
+  .appPopUpBlock {
+    font-size: 17px;
+    min-width: 500px;
+    min-height: 100px;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    background: #ffffff;
+  }
+
+/* button */
+.button {
+  margin: 10px 0 15px 0;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: #FFFFFF;
+  transition: background-color 0.3s ease;
+}
+
+.buttonDisabled {
+  margin: 10px 0 15px 0;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: default;
+  background-color: grey;
+  color: #FFFFFF;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+@media screen and (max-width: 768px) {
+  .button {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
+
+
+.deleteApp {
+	position: absolute;
+	top: 0px;
+	right: 20px;
+	width: 24px;
+	height: 24px;
+	opacity: 0.2;
+	cursor: pointer;
+  transition: opacity ease 0.5s;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+/* Крестик */
+.deleteApp::before,
+.deleteApp::after {
+	content: '';
+	position: absolute;
+	top: 10px;
+	display: block;
+	width: 24px;
+	height: 3px;
+	background: #000;
+}
+
+.deleteApp::before {
+	transform: rotate(45deg);
+}
+
+.deleteApp::after {
+	transform: rotate(-45deg);
+}
 /* end Applications */

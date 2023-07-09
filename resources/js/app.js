@@ -22,7 +22,10 @@ window.Vue = require('vue').default;
 //Vue.component('appliactions-component', require('./components/Applications/ApplicationsComponent.vue').default);
 // Vue.component('appliactions-item-component', require('./components/Applications/ApplicationItemComponent.vue').default);
 
-import ApplicationsComponent from './components/Applications/ApplicationsComponent.vue';
+import ApplicationsComponent from './components/Applications/New/ApplicationsComponent.vue';
+import ApplicationsInProgressComponent from './components/Applications/inProgress/ApplicationsInProgressComponent.vue';
+import ApplicationsDoneComponent from './components/Applications/Done/ApplicationsDoneComponent.vue';
+import ApplicationsCreateComponent from './components/Applications/Create/ApplicationsCreateComponent.vue';
 import UsersComponent from './components/Users/UsersComponent.vue';
 
 /**
@@ -36,5 +39,8 @@ const app = new Vue({
     components: {
         ApplicationsComponent,
         UsersComponent,
+        ApplicationsInProgressComponent,
+        ApplicationsDoneComponent,
+        ApplicationsCreateComponent,
     },
 });

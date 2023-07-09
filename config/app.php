@@ -183,7 +183,6 @@ return [
          */
         \App\Providers\ApplicationsServiceProvider::class,
         \App\Providers\UsersServiceProvider::class,
-        \App\Providers\TasksServiceProvider::class,
         \App\Providers\AuthCustomServiceProvider::class,
 
     ],
