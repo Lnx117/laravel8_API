@@ -265,6 +265,15 @@
 	}
 }
 
+.custom_row.row {
+  margin-top: 15px;
+}
+
+.custom_row.my_row {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 /* Крестик */
 .deleteApp::before,
 .deleteApp::after {

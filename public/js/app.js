@@ -5137,8 +5137,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['data'],
   components: {},
   data: function data() {
     return {
@@ -5154,13 +5169,55 @@ __webpack_require__.r(__webpack_exports__);
       floorNum: "",
       flatNum: "",
       problemText: "",
-      buttonBlock: false
+      showLoader: false,
+      showPopUp: false
     };
   },
   mounted: function mounted() {},
   watch: {},
   methods: {
-    createApp: function createApp() {}
+    createApp: function createApp() {
+      var _this = this;
+      this.showLoader = true;
+      var appData = {
+        "customer_first_name": this.customerFirstName,
+        "customer_last_name": this.customerLastName,
+        "customer_patronymic": this.customerPatronymic,
+        "customer_phone": this.phone,
+        "app_city": this.city,
+        "app_street": this.street,
+        "app_house_number": this.houseNumber,
+        "app_house_building": this.houseBuilding,
+        "app_flat_num": this.flatNum,
+        "app_floor_num": this.floorNum,
+        "app_house_entrance": this.houseEntrance,
+        "problem_text": this.problemText,
+        "app_status": 'Принято'
+      };
+      var url = '/api/sanctum/createApplication/';
+      axios.defaults.headers.common['Authorization'] = "Bearer ".concat(this.data.token);
+      axios.post(url, appData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        // Обработка успешного ответа
+        console.log(response);
+        _this.showLoader = false;
+        _this.PopUpMessage = "Заявка создана успешно";
+        _this.showPopUp = true;
+      })["catch"](function (error) {
+        // Обработка ошибки
+        console.log(error);
+        _this.showLoader = false;
+        _this.PopUpMessage = "Ошибка при создании заявки";
+        _this.showPopUp = true;
+      });
+    },
+    closePopUpMessage: function closePopUpMessage() {
+      this.showPopUp = false;
+      window.location.reload();
+    }
   }
 });
 
@@ -29845,10 +29902,53 @@ var render = function () {
           _c("div", { staticClass: "card-header" }, [_vm._v("Создать заявку")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _vm.showLoader
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "preloader-overlay",
+                    class: { active: _vm.showLoader },
+                  },
+                  [_c("div", { staticClass: "preloader-spinner" })]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.showPopUp
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "appPopUpBlock-overlay",
+                    class: { active: _vm.showPopUp },
+                  },
+                  [
+                    _c("div", { staticClass: "appPopUpBlock" }, [
+                      _c("div", [
+                        _c("strong", [_vm._v(_vm._s(_vm.PopUpMessage))]),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "button",
+                          on: { click: _vm.closePopUpMessage },
+                        },
+                        [
+                          _vm._v(
+                            "\n                                ЗАКРЫТЬ\n                            "
+                          ),
+                        ]
+                      ),
+                    ]),
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _vm._m(0),
             _vm._v(" "),
             _c("form", [
-              _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "custom_row row" }, [
                 _c("div", { staticClass: "col-md-4" }, [
                   _c("label", { attrs: { for: "customerLastName" } }, [
                     _vm._v("Фамилия"),
@@ -29946,7 +30046,7 @@ var render = function () {
                 ]),
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-md-6" }, [
+              _c("div", { staticClass: "custom_row my_row col-md-6" }, [
                 _c("label", { attrs: { for: "phone" } }, [_vm._v("Телефон")]),
                 _vm._v(" "),
                 _c("input", {
@@ -29972,7 +30072,7 @@ var render = function () {
                 }),
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-md-4" }, [
+              _c("div", { staticClass: "custom_row my_row col-md-4" }, [
                 _c("label", { attrs: { for: "city" } }, [_vm._v("Город")]),
                 _vm._v(" "),
                 _c("input", {
@@ -29998,7 +30098,7 @@ var render = function () {
                 }),
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-md-4" }, [
+              _c("div", { staticClass: "custom_row my_row col-md-4" }, [
                 _c("label", { attrs: { for: "street" } }, [_vm._v("Улица")]),
                 _vm._v(" "),
                 _c("input", {
@@ -30024,7 +30124,7 @@ var render = function () {
                 }),
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "custom_row row" }, [
                 _c("div", { staticClass: "col-md-4" }, [
                   _c("label", { attrs: { for: "houseNumber" } }, [
                     _vm._v("Дом"),
@@ -30090,7 +30190,7 @@ var render = function () {
                 ]),
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "custom_row row" }, [
                 _c("div", { staticClass: "col-md-4" }, [
                   _c("label", { attrs: { for: "houseEntrance" } }, [
                     _vm._v("Подъезд"),
@@ -30186,7 +30286,7 @@ var render = function () {
                 ]),
               ]),
               _vm._v(" "),
-              _c("div", { staticStyle: { "margin-top": "15px" } }, [
+              _c("div", { staticStyle: { margin: "15px 0" } }, [
                 _c("label", { attrs: { for: "problemText" } }, [
                   _vm._v("Описание проблемы"),
                 ]),
@@ -30218,21 +30318,15 @@ var render = function () {
                 }),
               ]),
               _vm._v(" "),
-              !_vm.buttonBlock
-                ? _c(
-                    "div",
-                    { staticClass: "button", on: { click: _vm.createApp } },
-                    [
-                      _vm._v(
-                        "\n                            Создать заявку\n                        "
-                      ),
-                    ]
-                  )
-                : _c("div", { staticClass: "buttonDisabled" }, [
-                    _vm._v(
-                      "\n                            Создать заявку\n                        "
-                    ),
-                  ]),
+              _c(
+                "div",
+                { staticClass: "button", on: { click: _vm.createApp } },
+                [
+                  _vm._v(
+                    "\n                            Создать заявку\n                        "
+                  ),
+                ]
+              ),
             ]),
           ]),
         ]),

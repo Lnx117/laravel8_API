@@ -192,7 +192,12 @@ class ApplicationsController extends Controller
 
     public function getApplicationsCreateList()
     {
-        return view('ApplicationsPages/app-create');
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+        $data['token'] = $token;
+
+        return view('ApplicationsPages/app-create')->with('data', $data);;
     }
 
     // public function deleteApplicationById(ApplicationsService $applicationsService, $id)

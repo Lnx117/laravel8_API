@@ -2,6 +2,6 @@
 
 @section('content')
     <div id="app">
-        <applications-create-component></applications-create-component>
+        <applications-create-component :data="{{ json_encode($data) }}"></applications-create-component>
     </div>
 @endsection
