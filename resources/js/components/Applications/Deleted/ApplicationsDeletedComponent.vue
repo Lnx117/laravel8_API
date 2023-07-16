@@ -3,8 +3,8 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Мастера</div>
-                    <users-item-component :data="data"></users-item-component>
+                    <div class="card-header">Заявки</div>
+                    <appliactions-item-component :data="data"></appliactions-item-component>
                 </div>
             </div>
         </div>
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import UsersItemComponent from './UsersItemComponent.vue';
+import ApplicationItemComponent from './ApplicationItemComponent.vue';
 
     export default {
         props: ['data'],
         components: {
-            'users-item-component': UsersItemComponent,
+            'appliactions-item-component': ApplicationItemComponent,
         },
         data() {
             return {
@@ -25,7 +25,7 @@ import UsersItemComponent from './UsersItemComponent.vue';
             };
         },
         mounted() {
-
+            console.log(this);
         },
         watch: {
 

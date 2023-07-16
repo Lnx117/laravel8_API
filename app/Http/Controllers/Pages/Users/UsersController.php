@@ -26,11 +26,18 @@ class UsersController extends Controller
             'user_role' => 'master'
         ];
 
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
 
-        return view('UsersPages/users-page')->with('users', $serviceResponse);
+        $data['token'] = $token;
+        $data['users'] = $serviceResponse;
+
+        return view('UsersPages/users-page')->with('data', $data);
     }
 
     public function getWorkingUsersList(UsersServiceInterface $usersService)
@@ -42,11 +49,18 @@ class UsersController extends Controller
             'user_role' => 'master'
         ];
 
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
 
-        return view('UsersPages/users-page')->with('users', $serviceResponse);
+        $data['token'] = $token;
+        $data['users'] = $serviceResponse;
+
+        return view('UsersPages/users-page')->with('data', $data);
     }
 
     public function getVacationUsersList(UsersServiceInterface $usersService)
@@ -58,10 +72,35 @@ class UsersController extends Controller
             'user_role' => 'master'
         ];
 
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
 
-        return view('UsersPages/users-page')->with('users', $serviceResponse);
+        $data['token'] = $token;
+        $data['users'] = $serviceResponse;
+
+        return view('UsersPages/users-page')->with('data', $data);
+    }
+
+    public function CreateMaster()
+    {
+        //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
+        //В нашем случае ищем те заявки которые в статусе Принято
+        $request = [
+            'user_status' => 'В отпуске/выходной',
+            'user_role' => 'master'
+        ];
+
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
+        $data['token'] = $token;
+
+        return view('UsersPages/users-create')->with('data', $data);
     }
 }

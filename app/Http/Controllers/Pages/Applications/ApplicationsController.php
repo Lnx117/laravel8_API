@@ -155,7 +155,7 @@ class ApplicationsController extends Controller
         $data['masters'] = $masters;
         $data['token'] = $token;
         
-        return view('ApplicationsPages/app-inProgress')->with('data', $data);
+        return view('ApplicationsPages/app-done')->with('data', $data);
     }
 
     public function getApplicationsDeletedList()
@@ -187,7 +187,7 @@ class ApplicationsController extends Controller
         $data['masters'] = $masters;
         $data['token'] = $token;
         
-        return view('ApplicationsPages/app-done')->with('data', $data);
+        return view('ApplicationsPages/app-deleted')->with('data', $data);
     }
 
     public function getApplicationsCreateList()

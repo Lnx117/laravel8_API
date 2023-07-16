@@ -52,6 +52,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('app.create') }}">Создать заявку</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.create') }}">Создать мастера</a>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))

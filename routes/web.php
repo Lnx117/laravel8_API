@@ -50,6 +50,8 @@ Route::get('/users/working', [UsersController::class, 'getWorkingUsersList'])->m
 
 Route::get('/users/vacatioin', [UsersController::class, 'getVacationUsersList'])->middleware('auth')->name('users.vacatioin');
 
+Route::get('/users/create', [UsersController::class, 'CreateMaster'])->middleware('auth')->name('users.create');
+
 // //Страница заявлений
 // Route::middleware(['auth'])->prefix('app')->group(function() {
 //     //Новые заявки

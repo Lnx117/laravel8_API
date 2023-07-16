@@ -25,8 +25,10 @@ window.Vue = require('vue').default;
 import ApplicationsComponent from './components/Applications/New/ApplicationsComponent.vue';
 import ApplicationsInProgressComponent from './components/Applications/inProgress/ApplicationsInProgressComponent.vue';
 import ApplicationsDoneComponent from './components/Applications/Done/ApplicationsDoneComponent.vue';
+import ApplicationsDeletedComponent from './components/Applications/Deleted/ApplicationsDeletedComponent.vue';
 import ApplicationsCreateComponent from './components/Applications/Create/ApplicationsCreateComponent.vue';
 import UsersComponent from './components/Users/UsersComponent.vue';
+import UsersCreateComponent from './components/Users/Create/UsersCreateComponent.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -41,6 +43,8 @@ const app = new Vue({
         UsersComponent,
         ApplicationsInProgressComponent,
         ApplicationsDoneComponent,
+        ApplicationsDeletedComponent,
         ApplicationsCreateComponent,
+        UsersCreateComponent,
     },
 });

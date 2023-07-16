@@ -12,6 +12,6 @@
                 </div>
             </div>
         </div>
-        <users-component :data="{{ json_encode($data) }}"></users-component>
+        <users-create-component :data="{{ json_encode($data) }}"></users-component>
     </div>
 @endsection

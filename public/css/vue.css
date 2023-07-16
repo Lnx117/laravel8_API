@@ -294,3 +294,8 @@
 	transform: rotate(-45deg);
 }
 /* end Applications */
+
+/* Users */
+.pos_relative {
+  position: relative;
+}
