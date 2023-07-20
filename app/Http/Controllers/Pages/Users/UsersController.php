@@ -96,11 +96,6 @@ class UsersController extends Controller
         ];
 
         //Токен юзера
-        $user = auth()->user();
-        $token = $user->createToken('token-name')->plainTextToken;
-
-        $data['token'] = $token;
-
-        return view('UsersPages/users-create')->with('data', $data);
+        return view('UsersPages/users-create');
     }
 }

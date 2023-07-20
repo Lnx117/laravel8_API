@@ -6425,55 +6425,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['data'],
   components: {},
   data: function data() {
-    return {};
+    return {
+      customerLastName: "",
+      customerFirstName: "",
+      customerPatronymic: "",
+      email: "",
+      password: "",
+      showLoader: false,
+      showPopUp: false
+    };
   },
   mounted: function mounted() {},
   watch: {},
-  methods: {}
+  methods: {
+    createUser: function createUser() {
+      var _this = this;
+      this.showLoader = true;
+      var userData = {
+        "name": this.customerFirstName,
+        "email": this.email,
+        "password": this.password,
+        "user_firstname": this.customerFirstName,
+        "user_lastname": this.customerLastName,
+        "user_patronymic": this.customerPatronymic
+      };
+      var url = '/api/sanctum/register/';
+      axios.post(url, userData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        // Обработка успешного ответа
+        console.log(response);
+        _this.showLoader = false;
+        _this.PopUpMessage = "Мастер успешно зарегистрирован";
+        _this.showPopUp = true;
+      })["catch"](function (error) {
+        // Обработка ошибки
+        console.log(error);
+        _this.showLoader = false;
+        _this.PopUpMessage = "Ошибка при регистрации мастера";
+        _this.showPopUp = true;
+      });
+    },
+    closePopUpMessage: function closePopUpMessage() {
+      this.showPopUp = false;
+      window.location.reload();
+    }
+  }
 });
 
 /***/ }),
@@ -32175,7 +32178,9 @@ var render = function () {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Создать заявку")]),
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("Создать мастера"),
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _vm.showLoader
@@ -32322,273 +32327,58 @@ var render = function () {
                 ]),
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "custom_row my_row col-md-6" }, [
-                _c("label", { attrs: { for: "phone" } }, [_vm._v("Телефон")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.phone,
-                      expression: "phone",
-                    },
-                  ],
-                  staticClass: "form-control",
-                  attrs: { id: "phone", placeholder: "Телефон", required: "" },
-                  domProps: { value: _vm.phone },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.phone = $event.target.value
-                    },
-                  },
-                }),
-              ]),
-              _vm._v(" "),
               _c("div", { staticClass: "custom_row my_row col-md-4" }, [
-                _c("label", { attrs: { for: "city" } }, [_vm._v("Город")]),
+                _c("label", { attrs: { for: "phone" } }, [_vm._v("Пароль")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.city,
-                      expression: "city",
-                    },
-                  ],
-                  staticClass: "form-control",
-                  attrs: { id: "city", placeholder: "Город", required: "" },
-                  domProps: { value: _vm.city },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.city = $event.target.value
-                    },
-                  },
-                }),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "custom_row my_row col-md-4" }, [
-                _c("label", { attrs: { for: "street" } }, [_vm._v("Улица")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.street,
-                      expression: "street",
-                    },
-                  ],
-                  staticClass: "form-control",
-                  attrs: { id: "street", placeholder: "Улица", required: "" },
-                  domProps: { value: _vm.street },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.street = $event.target.value
-                    },
-                  },
-                }),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "custom_row row" }, [
-                _c("div", { staticClass: "col-md-4" }, [
-                  _c("label", { attrs: { for: "houseNumber" } }, [
-                    _vm._v("Дом"),
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.houseNumber,
-                        expression: "houseNumber",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "houseNumber",
-                      placeholder: "Дом",
-                      required: "",
-                    },
-                    domProps: { value: _vm.houseNumber },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.houseNumber = $event.target.value
-                      },
-                    },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4" }, [
-                  _c("label", { attrs: { for: "houseBuilding" } }, [
-                    _vm._v("Строение"),
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.houseBuilding,
-                        expression: "houseBuilding",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "houseBuilding",
-                      placeholder: "Строение",
-                      required: "",
-                    },
-                    domProps: { value: _vm.houseBuilding },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.houseBuilding = $event.target.value
-                      },
-                    },
-                  }),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "custom_row row" }, [
-                _c("div", { staticClass: "col-md-4" }, [
-                  _c("label", { attrs: { for: "houseEntrance" } }, [
-                    _vm._v("Подъезд"),
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.houseEntrance,
-                        expression: "houseEntrance",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "houseEntrance",
-                      placeholder: "Подъезд",
-                      required: "",
-                    },
-                    domProps: { value: _vm.houseEntrance },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.houseEntrance = $event.target.value
-                      },
-                    },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4" }, [
-                  _c("label", { attrs: { for: "floorNum" } }, [_vm._v("Этаж")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.floorNum,
-                        expression: "floorNum",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "floorNum",
-                      placeholder: "Этаж",
-                      required: "",
-                    },
-                    domProps: { value: _vm.floorNum },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.floorNum = $event.target.value
-                      },
-                    },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4" }, [
-                  _c("label", { attrs: { for: "flatNum" } }, [
-                    _vm._v("Квартира номер"),
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.flatNum,
-                        expression: "flatNum",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "flatNum",
-                      placeholder: "Квартира номер",
-                      required: "",
-                    },
-                    domProps: { value: _vm.flatNum },
-                    on: {
-                      input: function ($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.flatNum = $event.target.value
-                      },
-                    },
-                  }),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticStyle: { margin: "15px 0" } }, [
-                _c("label", { attrs: { for: "problemText" } }, [
-                  _vm._v("Описание проблемы"),
-                ]),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.problemText,
-                      expression: "problemText",
+                      value: _vm.password,
+                      expression: "password",
                     },
                   ],
                   staticClass: "form-control",
                   attrs: {
-                    rows: "5",
-                    id: "problemText",
-                    placeholder: "Описание проблемы",
+                    type: "password",
+                    id: "phone",
+                    placeholder: "Пароль",
+                    required: "",
                   },
-                  domProps: { value: _vm.problemText },
+                  domProps: { value: _vm.password },
                   on: {
                     input: function ($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.problemText = $event.target.value
+                      _vm.password = $event.target.value
+                    },
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "custom_row my_row col-md-4" }, [
+                _c("label", { attrs: { for: "city" } }, [_vm._v("Email")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.email,
+                      expression: "email",
+                    },
+                  ],
+                  staticClass: "form-control",
+                  attrs: { id: "city", placeholder: "Email", required: "" },
+                  domProps: { value: _vm.email },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.email = $event.target.value
                     },
                   },
                 }),
@@ -32596,10 +32386,10 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "button", on: { click: _vm.createApp } },
+                { staticClass: "button", on: { click: _vm.createUser } },
                 [
                   _vm._v(
-                    "\n                            Создать заявку\n                        "
+                    "\n                            Создать мастера\n                        "
                   ),
                 ]
               ),
@@ -32615,7 +32405,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("p", [_vm._v("Данные клиента:")])])
+    return _c("div", [_c("p", [_vm._v("Создание мастера:")])])
   },
 ]
 render._withStripped = true
