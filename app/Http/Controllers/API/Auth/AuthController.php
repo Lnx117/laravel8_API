@@ -63,6 +63,7 @@ class AuthController extends Controller
      *     summary="Регистрация менеджера",
      *     description="Регистрация нового менеджера с использованием имени, адреса электронной почты и пароля",
      *     tags={"Регистрация и авторизация"},
+     *     security={{"apiAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/RegisterRequest")

@@ -42,7 +42,7 @@
                         </li>
                         @if(session()->has('user_role') &&  session('user_role') == 'admin')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('app.new') }}">Менеджеры</a>
+                                <a class="nav-link" href="{{ route('users.createManager') }}">Менеджеры</a>
                             </li>
                         @endif
                     </ul>

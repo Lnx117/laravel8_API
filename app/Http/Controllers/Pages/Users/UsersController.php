@@ -88,14 +88,17 @@ class UsersController extends Controller
 
     public function CreateMaster()
     {
-        //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
-        //В нашем случае ищем те заявки которые в статусе Принято
-        $request = [
-            'user_status' => 'В отпуске/выходной',
-            'user_role' => 'master'
-        ];
-
-        //Токен юзера
         return view('UsersPages/users-create');
+    }
+
+    public function CreateManager()
+    {
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
+        $data['token'] = $token;
+
+        return view('UsersPages/managers-create')->with('data', $data);;
     }
 }

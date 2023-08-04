@@ -566,7 +566,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             }
         },
         "/api/sanctum/token": {
@@ -858,148 +863,6 @@
     },
     "components": {
         "schemas": {
-            "Application": {
-                "title": "Applications",
-                "description": "Applications model",
-                "properties": {
-                    "id": {
-                        "title": "Application ID",
-                        "description": "Application ID",
-                        "format": "int64",
-                        "example": 1
-                    },
-                    "customer_id": {
-                        "title": "Customer ID",
-                        "description": "Customer ID",
-                        "type": "string",
-                        "format": "string",
-                        "example": 1
-                    },
-                    "customer_first_name": {
-                        "title": "Customer first name",
-                        "description": "Customer first name",
-                        "type": "string",
-                        "format": "string",
-                        "example": "Vlad"
-                    },
-                    "customer_last_name": {
-                        "title": "Customer lst name",
-                        "description": "Customer lst name",
-                        "type": "string",
-                        "format": "string",
-                        "example": "Ostryakov"
-                    },
-                    "customer_patronymic": {
-                        "title": "Customer patronymic",
-                        "description": "Customer patronymic",
-                        "type": "string",
-                        "format": "string",
-                        "example": "Pavlovich"
-                    },
-                    "customer_phone": {
-                        "title": "Customer phone",
-                        "description": "Customer phone",
-                        "type": "string",
-                        "format": "string",
-                        "example": "+79128539823"
-                    },
-                    "app_city": {
-                        "title": "Application city name",
-                        "description": "Application city name",
-                        "type": "string",
-                        "format": "string",
-                        "example": "Moskow"
-                    },
-                    "app_street": {
-                        "title": "Application srteet name",
-                        "description": "Application srteet name",
-                        "type": "string",
-                        "format": "string",
-                        "example": "Polyani"
-                    },
-                    "app_house_number": {
-                        "title": "Application house number",
-                        "description": "Application house number",
-                        "type": "string",
-                        "format": "string",
-                        "example": "9"
-                    },
-                    "app_house_building": {
-                        "title": "Application house building number (corp)",
-                        "description": "Application house building number",
-                        "type": "string",
-                        "format": "string",
-                        "example": "12"
-                    },
-                    "app_flat_num": {
-                        "title": "Application house flat number",
-                        "description": "Application house flat number",
-                        "type": "string",
-                        "format": "string",
-                        "example": "912"
-                    },
-                    "app_floor_num": {
-                        "title": "Application house floor number",
-                        "description": "Application house floor number",
-                        "type": "string",
-                        "format": "string",
-                        "example": "1"
-                    },
-                    "app_house_entrance": {
-                        "title": "Application house entrance number",
-                        "description": "Application house entrance number",
-                        "type": "string",
-                        "format": "string",
-                        "example": "90"
-                    },
-                    "app_created_at": {
-                        "title": "Application created at",
-                        "description": "Application created at",
-                        "type": "string",
-                        "format": "datetime",
-                        "example": "2023-02-14 13:45:30"
-                    },
-                    "app_to_execute_at": {
-                        "title": "Application must been execute at",
-                        "description": "Application must been execute at",
-                        "type": "string",
-                        "format": "datetime",
-                        "example": "2023-02-14 13:45:30"
-                    },
-                    "master_id": {
-                        "title": "Master id",
-                        "description": "Master id",
-                        "type": "string",
-                        "format": "string",
-                        "example": "23"
-                    },
-                    "app_status": {
-                        "title": "Application status",
-                        "description": "Application status. Application status must be: ....",
-                        "type": "string",
-                        "format": "string",
-                        "example": "In progress"
-                    },
-                    "created_at": {
-                        "title": "ID",
-                        "description": "ID",
-                        "type": "string",
-                        "format": "datetime",
-                        "example": "2023-02-14 13:45:30"
-                    },
-                    "updated_at": {
-                        "title": "ID",
-                        "description": "ID",
-                        "type": "string",
-                        "format": "datetime",
-                        "example": "2023-02-14 13:45:30"
-                    }
-                },
-                "type": "object",
-                "xml": {
-                    "name": "Applications"
-                }
-            },
             "RegisterRequest": {
                 "title": "Регистрация нового пользователя",
                 "required": [

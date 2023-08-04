@@ -50,6 +50,7 @@ class AuthService implements AuthServiceInterface
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input['user_role'] = "master";
+        $input['user_status'] = "Свободен";
         $user = $this->userRepository->createUser($input);
 
         //$token = $user->createToken($request->device_name)->plainTextToken;

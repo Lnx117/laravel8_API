@@ -29,6 +29,7 @@ import ApplicationsDeletedComponent from './components/Applications/Deleted/Appl
 import ApplicationsCreateComponent from './components/Applications/Create/ApplicationsCreateComponent.vue';
 import UsersComponent from './components/Users/UsersComponent.vue';
 import UsersCreateComponent from './components/Users/Create/UsersCreateComponent.vue';
+import ManagersCreateComponent from './components/Users/CreateManager/ManagersCreateComponent.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -46,5 +47,6 @@ const app = new Vue({
         ApplicationsDeletedComponent,
         ApplicationsCreateComponent,
         UsersCreateComponent,
+        ManagersCreateComponent,
     },
 });

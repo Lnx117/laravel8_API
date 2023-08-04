@@ -52,6 +52,8 @@ Route::get('/users/vacatioin', [UsersController::class, 'getVacationUsersList'])
 
 Route::get('/users/create', [UsersController::class, 'CreateMaster'])->middleware('auth')->name('users.create');
 
+Route::get('/users/createManager', [UsersController::class, 'CreateManager'])->middleware('auth')->name('users.createManager');
+
 // //Страница заявлений
 // Route::middleware(['auth'])->prefix('app')->group(function() {
 //     //Новые заявки
