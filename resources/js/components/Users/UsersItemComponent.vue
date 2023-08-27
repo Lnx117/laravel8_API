@@ -37,12 +37,6 @@ import DeleteMasterComponent from './DeleteMasterComponent.vue';
 
             };
         },
-        mounted() {
-
-        },
-        watch: {
-
-        },
         methods: {
             closePopUpMessage() {
                 this.showPopUp = false;

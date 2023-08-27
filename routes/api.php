@@ -55,12 +55,12 @@ Route::middleware(['auth:sanctum','checkAdminOrManagerRole'])->prefix('sanctum')
     Route::delete('deleteApplicationById/{id}', [ApplicationsController::class, 'deleteApplicationById']);
 });
 
-// Route to reset password
-Route::post('reset-password', function (Request $request) {
-    $status = Password::sendResetLink(['email' => 'vlados117@gmail.com']);
-    $x = Hash::make('19960620v');
-    $y = Hash::make('adminadmin');
+// // Route to reset password
+// Route::post('reset-password', function (Request $request) {
+//     $status = Password::sendResetLink(['email' => 'vlados117@gmail.com']);
+//     $x = Hash::make('19960620v');
+//     $y = Hash::make('adminadmin');
 
-    return response()->json(1);
+//     return response()->json(1);
 
-});
+// });

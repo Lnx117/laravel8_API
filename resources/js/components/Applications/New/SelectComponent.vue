@@ -129,7 +129,6 @@ export default {
             this.deleteApp = false;
         },
         agreeDeleteApp() {
-            console.log(this.appKey);
             this.showLoader = true;
             let appUpdate = {
                 app_status: 'Удалена',

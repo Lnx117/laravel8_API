@@ -86,12 +86,12 @@ class UsersController extends Controller
         return view('UsersPages/users-page')->with('data', $data);
     }
 
-    public function CreateMaster()
+    public function createMaster()
     {
         return view('UsersPages/users-create');
     }
 
-    public function CreateManager()
+    public function createManager()
     {
         //Токен юзера
         $user = auth()->user();
@@ -100,5 +100,45 @@ class UsersController extends Controller
         $data['token'] = $token;
 
         return view('UsersPages/managers-create')->with('data', $data);;
+    }
+
+    public function managers(UsersServiceInterface $usersService)
+    {
+        $request = [
+            'user_role' => 'manager',
+            'user_status' => 'Активен',
+        ];
+
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
+        $serviceResponse = $usersService->getUsersByField($request);
+        $serviceResponse = $serviceResponse['data'];
+
+        $data['token'] = $token;
+        $data['managers'] = $serviceResponse;
+
+        return view('UsersPages/managers')->with('data', $data);
+    }
+
+    public function deletedManagers(UsersServiceInterface $usersService)
+    {
+        $request = [
+            'user_role' => 'manager',
+            'user_status' => 'Удален',
+        ];
+
+        //Токен юзера
+        $user = auth()->user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
+        $serviceResponse = $usersService->getUsersByField($request);
+        $serviceResponse = $serviceResponse['data'];
+
+        $data['token'] = $token;
+        $data['managers'] = $serviceResponse;
+
+        return view('UsersPages/managersDeleted')->with('data', $data);
     }
 }

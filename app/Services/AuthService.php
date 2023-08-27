@@ -86,6 +86,7 @@ class AuthService implements AuthServiceInterface
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $input['user_role'] = 'manager';
+        $input['user_status'] = 'Активен';
         $user = $this->userRepository->createUser($input);
 
         //$token = $user->createToken($request->device_name)->plainTextToken;
@@ -118,7 +119,6 @@ class AuthService implements AuthServiceInterface
             return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
         }
 
-        //response()->json(['token' => $user->createToken($request->device_name)->plainTextToken]);
         return response()->json(['token' => $user->createToken('token-name')->plainTextToken]);
 
     }

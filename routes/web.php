@@ -50,18 +50,11 @@ Route::get('/users/working', [UsersController::class, 'getWorkingUsersList'])->m
 
 Route::get('/users/vacatioin', [UsersController::class, 'getVacationUsersList'])->middleware('auth')->name('users.vacatioin');
 
-Route::get('/users/create', [UsersController::class, 'CreateMaster'])->middleware('auth')->name('users.create');
+Route::get('/users/create', [UsersController::class, 'createMaster'])->middleware('auth')->name('users.create');
 
-Route::get('/users/createManager', [UsersController::class, 'CreateManager'])->middleware('auth')->name('users.createManager');
+Route::get('/users/createManager', [UsersController::class, 'createManager'])->middleware('auth')->name('users.createManager');
 
-// //Страница заявлений
-// Route::middleware(['auth'])->prefix('app')->group(function() {
-//     //Новые заявки
-//     Route::get('new', [ApplicationsController::class, 'getApplicationsFreeList'])->middleware('auth');
-//     //Заявки назначенные
-//     Route::get('wait', [ApplicationsController::class, 'getApplicationsWaitList'])->middleware('auth');
-//     //Заявки в работе
-//     Route::get('inProgress', [ApplicationsController::class, 'getApplicationsInProgressList'])->middleware('auth');
-//     //Выполненные заявки
-//     Route::get('done', [ApplicationsController::class, 'getApplicationsDoneList'])->middleware('auth');
-// });
+Route::get('/users/managers', [UsersController::class, 'managers'])->middleware('auth')->name('users.managers');
+
+Route::get('/users/managersDeleted', [UsersController::class, 'deletedManagers'])->middleware('auth')->name('users.managersDeleted');
+

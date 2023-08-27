@@ -42,7 +42,7 @@
                         </li>
                         @if(session()->has('user_role') &&  session('user_role') == 'admin')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('users.createManager') }}">Менеджеры</a>
+                                <a class="nav-link" href="{{ route('users.managers') }}">Менеджеры</a>
                             </li>
                         @endif
                     </ul>
@@ -55,6 +55,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.create') }}">Создать мастера</a>
                         </li>
+                        @if(session()->has('user_role') &&  session('user_role') == 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('users.createManager') }}">Создать менеджера</a>
+                            </li>
+                        @endif
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))

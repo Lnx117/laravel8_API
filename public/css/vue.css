@@ -299,3 +299,10 @@
 .pos_relative {
   position: relative;
 }
+
+/* Managers */
+.managerItemcard {
+  display: flex;
+  border-bottom: 1px solid black;
+  margin-bottom: 20px;
+}
