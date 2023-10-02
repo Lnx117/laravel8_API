@@ -99,7 +99,7 @@
                     "user_patronymic": this.customerPatronymic,
                 };
 
-                let url = '/api/sanctum/register/';
+                let url = '/api/sanctum/register';
 
                 axios.post(url, userData, {
                     headers: {

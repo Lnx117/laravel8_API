@@ -100,7 +100,7 @@
                     "user_patronymic": this.customerPatronymic,
                 };
 
-                let url = '/api/sanctum/registerManager/';
+                let url = '/api/sanctum/registerManager';
 
                 console.log(this.data);
                 console.log(this.data.token);
