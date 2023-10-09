@@ -6691,10 +6691,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
       this.deleteApp = false;
       this.showLoader = true;
-      var url = '/api/sanctum/deleteUserByIdOrEmail/' + this.masterId;
-      console.log(url);
+      var userUpdate = {
+        user_status: 'Удален'
+      };
+      var url = '/api/sanctum/updateUserByIdOrEmail/' + this.masterId;
       axios.defaults.headers.common['Authorization'] = "Bearer ".concat(this.token);
-      axios["delete"](url, {
+      axios.put(url, userUpdate, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -7060,6 +7062,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _DeleteMasterComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DeleteMasterComponent.vue */ "./resources/js/components/Users/DeleteMasterComponent.vue");
+//
 //
 //
 //
@@ -34107,9 +34110,11 @@ var render = function () {
                   ]),
                 ]),
                 _vm._v(" "),
-                _c("delete-master-component", {
-                  attrs: { masterId: user.id, token: _vm.data.token },
-                }),
+                !_vm.data.isDeletePage
+                  ? _c("delete-master-component", {
+                      attrs: { masterId: user.id, token: _vm.data.token },
+                    })
+                  : _vm._e(),
               ],
               1
             ),

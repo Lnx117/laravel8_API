@@ -9,6 +9,9 @@ use App\Interfaces\UsersServiceInterface;
 class UsersService implements UsersServiceInterface
 {
     protected $userRepository;
+    private $apiStatuses;
+    private $masterStatuses;
+    private $roles;
 
     //Dependency injection
     //UsersService получает на вход реализацию интерфейса UserRepositoryInterface
@@ -16,6 +19,9 @@ class UsersService implements UsersServiceInterface
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
+        $this->apiStatuses = config('ApiStatus');
+        $this->masterStatuses = config('MasterStatuses');
+        $this->roles = config('Roles');
     }
 
     protected $response = [
@@ -26,22 +32,16 @@ class UsersService implements UsersServiceInterface
 
     public function getUsersList()
     {
-        //Получаем статусы ответа
-        $statuses = config('ApiStatus');
-
         //Получаем список рользователей
         $this->response['data'] = $this->userRepository->getAllUsers();
         $this->response['message'] = 'All users list';
-        $this->response['status'] = $statuses['ok'];
+        $this->response['status'] = $this->apiStatuses['ok'];
 
         return $this->response;
     }
 
     public function updateUserByIdOrEmail($request, $userIdOrEmail)
     {
-        //Получаем статусы ответа
-        $statuses = config('ApiStatus');
-
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($userIdOrEmail)) {
             $user = $this->userRepository->getById($userIdOrEmail);
@@ -52,7 +52,7 @@ class UsersService implements UsersServiceInterface
 
         if (!$user) {
             $this->response['message'] = 'User not found';
-            $this->response['status'] = $statuses['warning'];
+            $this->response['status'] = $this->apiStatuses['warning'];
     
             return $this->response;
         }
@@ -80,17 +80,13 @@ class UsersService implements UsersServiceInterface
 
         $this->response['data'] = $user;
         $this->response['message'] = 'User updated successfully';
-        $this->response['status'] = $statuses['ok'];
+        $this->response['status'] = $this->apiStatuses['ok'];
 
         return $this->response;
     }
 
     public function getUserByIdOrEmail($userIdOrEmail)
     {
-
-        //Получаем статусы ответа
-        $statuses = config('ApiStatus');
-
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($userIdOrEmail)) {
             $user = $this->userRepository->getById($userIdOrEmail);
@@ -101,23 +97,20 @@ class UsersService implements UsersServiceInterface
 
         if (!$user) {
             $this->response['message'] = 'User not found';
-            $this->response['status'] = $statuses['warning'];
+            $this->response['status'] = $this->apiStatuses['warning'];
     
             return $this->response;
         }
 
         $this->response['data'] = $user;
         $this->response['message'] = 'User founded successfully';
-        $this->response['status'] = $statuses['ok'];
+        $this->response['status'] = $this->apiStatuses['ok'];
 
         return $this->response;
     }
 
     public function deleteUserByIdOrEmail($userIdOrEmail)
     {
-        //Получаем статусы ответа
-        $statuses = config('ApiStatus');
-
         // проверяем, является ли параметр идентификатором пользователя
         if (is_numeric($userIdOrEmail)) {
             $user = $this->userRepository->getById($userIdOrEmail);
@@ -128,7 +121,7 @@ class UsersService implements UsersServiceInterface
 
         if (!$user) {
             $this->response['message'] = 'User not found';
-            $this->response['status'] = $statuses['warning'];
+            $this->response['status'] = $this->apiStatuses['warning'];
     
             return $this->response;
         }
@@ -137,22 +130,20 @@ class UsersService implements UsersServiceInterface
 
         if ($user != true) {
             $this->response['message'] = 'User not deleted';
-            $this->response['status'] = $statuses['warning'];
+            $this->response['status'] = $this->apiStatuses['warning'];
     
             return $this->response;
         }
 
         $this->response['data'] = $user;
         $this->response['message'] = 'User deleted successfully';
-        $this->response['status'] = $statuses['ok'];
+        $this->response['status'] = $this->apiStatuses['ok'];
 
         return $this->response;
     }
 
     public function getUsersByField($request)
     {
-        $statuses = config('ApiStatus');
-
         if(is_array($request)) {
             $data = $request;
         } else {
@@ -164,14 +155,14 @@ class UsersService implements UsersServiceInterface
 
         if (empty($app)) {
             $this->response['message'] = 'Users not found';
-            $this->response['status'] = $statuses['warning'];
+            $this->response['status'] = $this->apiStatuses['warning'];
     
             return $this->response;
         }
 
         $this->response['data'] = $app;
         $this->response['message'] = 'Users founded successfully';
-        $this->response['status'] = $statuses['ok'];
+        $this->response['status'] = $this->apiStatuses['ok'];
 
         return $this->response;
     }

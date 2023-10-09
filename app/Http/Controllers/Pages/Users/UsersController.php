@@ -17,18 +17,30 @@ class UsersController extends Controller
         'data' => '',
     ];
 
+    private $apiStatuses;
+    private $masterStatuses;
+    private $roles;
+
+    public function __construct()
+    {
+        $this->apiStatuses = config('ApiStatus');
+        $this->masterStatuses = config('MasterStatuses');
+        $this->roles = config('Roles');
+    }
+
+
     public function getFreeUsersList(UsersServiceInterface $usersService)
     {
         //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
         //В нашем случае ищем те заявки которые в статусе Принято
         $request = [
-            'user_status' => 'Свободен',
-            'user_role' => 'master'
+            'user_status' => $this->masterStatuses['free'],
+            'user_role' => $this->roles['master']
         ];
 
         //Токен юзера
         $user = auth()->user();
-        $token = $user->createToken('token-name')->plainTextToken;
+        $token = session('user_token');
 
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
@@ -45,13 +57,13 @@ class UsersController extends Controller
         //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
         //В нашем случае ищем те заявки которые в статусе Принято
         $request = [
-            'user_status' => 'В работе',
-            'user_role' => 'master'
+            'user_status' => $this->masterStatuses['working'],
+            'user_role' => $this->roles['master']
         ];
 
         //Токен юзера
         $user = auth()->user();
-        $token = $user->createToken('token-name')->plainTextToken;
+        $token = session('user_token');
 
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
@@ -68,13 +80,13 @@ class UsersController extends Controller
         //Так как используем метод апишки, то моделруем запрос и вкладываем в него поля по которым отсеиваем
         //В нашем случае ищем те заявки которые в статусе Принято
         $request = [
-            'user_status' => 'В отпуске/выходной',
-            'user_role' => 'master'
+            'user_status' => $this->masterStatuses['vacation'],
+            'user_role' => $this->roles['master']
         ];
 
         //Токен юзера
         $user = auth()->user();
-        $token = $user->createToken('token-name')->plainTextToken;
+        $token = session('user_token');
 
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
@@ -95,7 +107,7 @@ class UsersController extends Controller
     {
         //Токен юзера
         $user = auth()->user();
-        $token = $user->createToken('token-name')->plainTextToken;
+        $token = session('user_token');
 
         $data['token'] = $token;
 
@@ -111,7 +123,7 @@ class UsersController extends Controller
 
         //Токен юзера
         $user = auth()->user();
-        $token = $user->createToken('token-name')->plainTextToken;
+        $token = session('user_token');
 
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
@@ -125,13 +137,13 @@ class UsersController extends Controller
     public function deletedManagers(UsersServiceInterface $usersService)
     {
         $request = [
-            'user_role' => 'manager',
-            'user_status' => 'Удален',
+            'user_role' => $this->roles['manager'],
+            'user_status' => $this->masterStatuses['deleted'],
         ];
 
         //Токен юзера
         $user = auth()->user();
-        $token = $user->createToken('token-name')->plainTextToken;
+        $token = session('user_token');
 
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
@@ -140,5 +152,26 @@ class UsersController extends Controller
         $data['managers'] = $serviceResponse;
 
         return view('UsersPages/managersDeleted')->with('data', $data);
+    }
+
+    public function deletedMasters(UsersServiceInterface $usersService)
+    {
+        $request = [
+            'user_role' => $this->roles['master'],
+            'user_status' => $this->masterStatuses['deleted'],
+        ];
+
+        //Токен юзера
+        $user = auth()->user();
+        $token = session('user_token');
+
+        $serviceResponse = $usersService->getUsersByField($request);
+        $serviceResponse = $serviceResponse['data'];
+
+        $data['token'] = $token;
+        $data['isDeletePage'] = true;
+        $data['users'] = $serviceResponse;
+
+        return view('UsersPages/users-page')->with('data', $data);
     }
 }

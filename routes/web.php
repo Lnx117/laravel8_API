@@ -16,6 +16,8 @@ use App\Http\Controllers\Pages\Auth\NewLoginController;
 |
 */
 
+//НА ВСЕ РОУТЫ УСТАНОВЛЕН МИДЛВАР ЗАПИСЫВАЮЩИЙ ТОКЕН ПОЛЬЗОВАТЕЛЯ В СЕССИЮ
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -44,17 +46,22 @@ Route::get('/app/deleted', [ApplicationsController::class, 'getApplicationsDelet
 Route::get('/app/create', [ApplicationsController::class, 'getApplicationsCreateList'])->middleware('auth')->name('app.create');
 
 //Страница пользователей
-Route::get('/users/free', [UsersController::class, 'getFreeUsersList'])->middleware('auth')->name('users.free');
+Route::middleware(['auth:sanctum', 'SetUserToken'])->group(function () {
+    
+    Route::get('/users/free', [UsersController::class, 'getFreeUsersList'])->middleware('auth')->name('users.free');
 
-Route::get('/users/working', [UsersController::class, 'getWorkingUsersList'])->middleware('auth')->name('users.working');
-
-Route::get('/users/vacatioin', [UsersController::class, 'getVacationUsersList'])->middleware('auth')->name('users.vacatioin');
-
-Route::get('/users/create', [UsersController::class, 'createMaster'])->middleware('auth')->name('users.create');
-
-Route::get('/users/createManager', [UsersController::class, 'createManager'])->middleware('auth')->name('users.createManager');
-
-Route::get('/users/managers', [UsersController::class, 'managers'])->middleware('auth')->name('users.managers');
-
-Route::get('/users/managersDeleted', [UsersController::class, 'deletedManagers'])->middleware('auth')->name('users.managersDeleted');
+    Route::get('/users/working', [UsersController::class, 'getWorkingUsersList'])->middleware('auth')->name('users.working');
+    
+    Route::get('/users/vacatioin', [UsersController::class, 'getVacationUsersList'])->middleware('auth')->name('users.vacatioin');
+    
+    Route::get('/users/create', [UsersController::class, 'createMaster'])->middleware('auth')->name('users.create');
+    
+    Route::get('/users/createManager', [UsersController::class, 'createManager'])->middleware('auth')->name('users.createManager');
+    
+    Route::get('/users/managers', [UsersController::class, 'managers'])->middleware('auth')->name('users.managers');
+    
+    Route::get('/users/managersDeleted', [UsersController::class, 'deletedManagers'])->middleware('auth')->name('users.managersDeleted');
+    
+    Route::get('/users/mastersDeleted', [UsersController::class, 'deletedMasters'])->middleware('auth')->name('users.mastersDeleted');
+});
 

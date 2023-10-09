@@ -14,6 +14,9 @@ use App\Interfaces\UserRepositoryInterface;
 class AuthService implements AuthServiceInterface
 {
     protected $userRepository;
+    private $apiStatuses;
+    private $masterStatuses;
+    private $roles;
 
     //Dependency injection
     //На вход требуем объект, который реализует интерфейс ApplicationsServiceInterface
@@ -21,6 +24,9 @@ class AuthService implements AuthServiceInterface
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
+        $this->apiStatuses = config('ApiStatus');
+        $this->masterStatuses = config('MasterStatuses');
+        $this->roles = config('Roles');
     }
 
     protected $response = [
@@ -30,9 +36,7 @@ class AuthService implements AuthServiceInterface
     ];
 
     public function register($request)
-    { 
-        $statuses = config('ApiStatus');
-
+    {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -49,52 +53,44 @@ class AuthService implements AuthServiceInterface
         
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $input['user_role'] = "master";
-        $input['user_status'] = "Свободен";
+        $input['user_role'] = $this->roles['master'];
+        $input['user_status'] = $this->masterStatuses['free'];
         $user = $this->userRepository->createUser($input);
 
-        //$token = $user->createToken($request->device_name)->plainTextToken;
         $token = $user->createToken('token-name')->plainTextToken;
 
         
         $this->response['data'] = $token;
         $this->response['message'] = 'New user token';
-        $this->response['status'] = $statuses['ok'];
+        $this->response['status'] = $this->apiStatuses['ok'];
 
         return $this->response;
     }
 
     public function registerManager($request)
     { 
-        $statuses = config('ApiStatus');
-        
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            //'device_name' => ['required', 'string']
         ]); 
 
         if ($validator->fails()) {
-            $this->response['message'] = 'Register validation failed';
-            $this->response['status'] = $statuses['warning'];
-    
-            return $this->response;
+            return response()->json(['error' => $validator->errors()], 401);
         }
 
         
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $input['user_role'] = 'manager';
+        $input['user_role'] = $this->roles['manager'];
         $input['user_status'] = 'Активен';
         $user = $this->userRepository->createUser($input);
 
-        //$token = $user->createToken($request->device_name)->plainTextToken;
         $token = $user->createToken('token-name')->plainTextToken;
 
         $this->response['data'] = $token;
         $this->response['message'] = 'New manager token';
-        $this->response['status'] = $statuses['ok'];
+        $this->response['status'] = $this->apiStatuses['ok'];
 
         return $this->response;
     }
@@ -104,7 +100,6 @@ class AuthService implements AuthServiceInterface
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
-            //'device_name' => ['required', 'string']
         ]);    
         
         if ($validator->fails()) {

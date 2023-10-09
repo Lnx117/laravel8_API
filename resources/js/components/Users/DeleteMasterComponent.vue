@@ -64,11 +64,13 @@
             agreeDeleteMaster() {
                 this.deleteApp = false;
                 this.showLoader = true;
+                let userUpdate = {
+                    user_status: 'Удален',
+                };
+                let url = '/api/sanctum/updateUserByIdOrEmail/' + this.masterId;
 
-                let url = '/api/sanctum/deleteUserByIdOrEmail/' + this.masterId;
-                console.log(url);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-                axios.delete(url, {
+                axios.put(url, userUpdate, {
                     headers: {
                         'Content-Type': 'application/json'
                     }

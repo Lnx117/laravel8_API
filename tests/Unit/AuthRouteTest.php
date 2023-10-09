@@ -23,13 +23,14 @@ class AuthRouteTest extends TestCase
     //Проверка роута регистрации пользователя
     public function testRegister()
     {
-        $statuses = config('ApiStatus');
+        $apiStatuses = config('ApiStatus');
+        $roles = config('Roles');
 
         $userData = [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password',
-            'user_role' => 'master',
+            'user_role' => $roles['master'],
             'user_firstname' => $this->faker->name,
             'user_lastname' => $this->faker->name,
             'user_patronymic' => $this->faker->name,
@@ -39,7 +40,7 @@ class AuthRouteTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson([
-            'status' => $statuses['ok'],
+            'status' => $apiStatuses['ok'],
             'message' => 'New user token',
         ]);
 
@@ -53,13 +54,13 @@ class AuthRouteTest extends TestCase
     //Короткие данные в запросе
     public function testRegisterTooShort()
     {
-        $statuses = config('ApiStatus');
+        $roles = config('Roles');
 
         $userData = [
             'name' => "",
             'email' => "i",
             'password' => "i",
-            'user_role' => "master",
+            'user_role' => $roles["master"],
             'user_firstname' => "i",
             'user_lastname' => "i",
             'user_patronymic' => "i",
@@ -97,8 +98,6 @@ class AuthRouteTest extends TestCase
     //Пустой запрос с рег данными
     public function testRegisterEmptyData()
     {
-        $statuses = config('ApiStatus');
-
         $userData = [
 
         ];
@@ -212,11 +211,12 @@ class AuthRouteTest extends TestCase
     //Может только админ
     public function testRegisterManager()
     {
-        $statuses = config('ApiStatus');
+        $apiStatuses = config('ApiStatus');
+        $roles = config('Roles');
 
         // Создаем пользователя с ролью 'admin' для выполнения запроса
         $admin = User::factory()->create([
-            'user_role' => 'admin',
+            'user_role' => $roles['admin'],
         ]);
 
         // Создаем данные для запроса
@@ -234,7 +234,7 @@ class AuthRouteTest extends TestCase
 
         // Проверяем, что ответ содержит ожидаемые данные
         $response->assertJson([
-            'status' => $statuses['ok'],
+            'status' => $apiStatuses['ok'],
             'message' => 'New manager token',
             // Дополнительные проверки данных, если необходимо
         ]);
@@ -251,11 +251,11 @@ class AuthRouteTest extends TestCase
     //Попытка зарегистрировать будучи не админом
     public function testRegisterManagerNotAdmin()
     {
-        $statuses = config('ApiStatus');
+        $roles = config('Roles');
 
         // Создаем пользователя с ролью 'admin' для выполнения запроса
         $admin = User::factory()->create([
-            'user_role' => 'manager',
+            'user_role' => $roles['manager'],
         ]);
 
         // Создаем данные для запроса
@@ -279,11 +279,11 @@ class AuthRouteTest extends TestCase
     //Попытка зарегистрировать будучи админом, но спустыми данными
     public function testRegisterManagerEmptyData()
     {
-        $statuses = config('ApiStatus');
+        $roles = config('Roles');
 
         // Создаем пользователя с ролью 'admin' для выполнения запроса
         $admin = User::factory()->create([
-            'user_role' => 'admin',
+            'user_role' => $roles['admin'],
         ]);
 
         // Создаем данные для запроса
@@ -295,13 +295,21 @@ class AuthRouteTest extends TestCase
         $response = $this->actingAs($admin)->postJson('api/sanctum/registerManager', $data);
 
         // Проверяем, что ответ имеет статус 200
-        $response->assertStatus(200);
+        $response->assertStatus(401);
 
         // Проверяем, что ответ содержит ожидаемые данные
         $response->assertJson([
-            "status" => "Warning",
-            "message" => "Register validation failed",
-            "data" => ""
+            "error" => [
+                "name" => [
+                    "The name field is required."
+                ],
+                "email" => [
+                    "The email field is required."
+                ],
+                "password" => [
+                    "The password field is required."
+                ],
+            ]
         ]);
     }
 
@@ -309,11 +317,11 @@ class AuthRouteTest extends TestCase
     //Попытка зарегистрировать будучи админом, но некорректыми данными
     public function testRegisterManagerNotValidData()
     {
-        $statuses = config('ApiStatus');
+        $roles = config('Roles');
 
         // Создаем пользователя с ролью 'admin' для выполнения запроса
         $admin = User::factory()->create([
-            'user_role' => 'admin',
+            'user_role' => $roles['admin'],
         ]);
 
         // Создаем данные для запроса
@@ -327,13 +335,18 @@ class AuthRouteTest extends TestCase
         $response = $this->actingAs($admin)->postJson('api/sanctum/registerManager', $data);
 
         // Проверяем, что ответ имеет статус 200
-        $response->assertStatus(200);
+        $response->assertStatus(401);
 
         // Проверяем, что ответ содержит ожидаемые данные
         $response->assertJson([
-            "status" => "Warning",
-            "message" => "Register validation failed",
-            "data" => ""
+            "error" => [
+                "email" => [
+                    "The email must be a valid email address."
+                ],
+                "password" => [
+                    "The password must be at least 8 characters."
+                ],
+            ]
         ]);
     }
 }

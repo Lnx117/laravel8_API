@@ -15,7 +15,8 @@
                             <p>Заявки в очереди: <strong> <template v-for=" app in JSON.parse(user.app_ids)">{{" | " + app + " | "}}</template></strong></p>
                             <p>Электронная почта: <strong>{{ user.email }}</strong></p>
                         </div>
-                        <delete-master-component :masterId="user.id" :token="data.token"></delete-master-component>
+
+                        <delete-master-component v-if='!data.isDeletePage' :masterId="user.id" :token="data.token"></delete-master-component>
                     </div>
                 </div>
             </div>

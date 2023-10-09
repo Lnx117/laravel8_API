@@ -37,6 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // \App\Http\Middleware\SetUserToken::class,
         ],
 
         'api' => [
@@ -64,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'CheckAdminRole' => \App\Http\Middleware\CheckAdminRole::class,
         'checkAdminOrManagerRole' => \App\Http\Middleware\checkAdminOrManagerRole::class,
+        'SetUserToken' => \App\Http\Middleware\SetUserToken::class,
     ];
 }
