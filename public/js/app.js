@@ -5194,7 +5194,7 @@ __webpack_require__.r(__webpack_exports__);
         "problem_text": this.problemText,
         "app_status": 'Принято'
       };
-      var url = '/api/sanctum/createApplication/';
+      var url = '/public/api/sanctum/createApplication/';
       axios.defaults.headers.common['Authorization'] = "Bearer ".concat(this.data.token);
       axios.post(url, appData, {
         headers: {

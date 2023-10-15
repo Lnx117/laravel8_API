@@ -153,7 +153,7 @@
                     "app_status": 'Принято',
                 };
 
-                let url = '/api/sanctum/createApplication/';
+                let url = '/public/api/sanctum/createApplication/';
 
                 axios.defaults.headers.common['Authorization'] = `Bearer ${this.data.token}`;
                 axios.post(url, appData, {
