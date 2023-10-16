@@ -31,7 +31,7 @@ Route::prefix('sanctum')->namespace('Auth')->group(function() {
     Route::post('register', [AuthController::class, 'register']);
     //create manager
     Route::post('registerManager', [AuthController::class, 'registerManager'])
-    ->middleware(['auth:sanctum', 'CheckAdminRole']);
+    ->middleware(['auth:sanctum', 'checkAdminRole']);
     //get token by log/pas
     Route::post('token', [AuthController::class, 'token']);
 });

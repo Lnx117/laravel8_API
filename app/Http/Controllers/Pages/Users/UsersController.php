@@ -40,7 +40,7 @@ class UsersController extends Controller
 
         //Токен юзера
         $user = auth()->user();
-        $token = session('user_token');
+        $token = $user->createToken('token-name')->plainTextToken;
 
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
@@ -63,7 +63,7 @@ class UsersController extends Controller
 
         //Токен юзера
         $user = auth()->user();
-        $token = session('user_token');
+        $token = $user->createToken('token-name')->plainTextToken;
 
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
@@ -86,7 +86,7 @@ class UsersController extends Controller
 
         //Токен юзера
         $user = auth()->user();
-        $token = session('user_token');
+        $token = $user->createToken('token-name')->plainTextToken;
 
         //Получаем список задач
         $serviceResponse = $usersService->getUsersByField($request);
@@ -107,7 +107,7 @@ class UsersController extends Controller
     {
         //Токен юзера
         $user = auth()->user();
-        $token = session('user_token');
+        $token = $user->createToken('token-name')->plainTextToken;
 
         $data['token'] = $token;
 
@@ -123,7 +123,7 @@ class UsersController extends Controller
 
         //Токен юзера
         $user = auth()->user();
-        $token = session('user_token');
+        $token = $user->createToken('token-name')->plainTextToken;
 
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
@@ -143,7 +143,7 @@ class UsersController extends Controller
 
         //Токен юзера
         $user = auth()->user();
-        $token = session('user_token');
+        $token = $user->createToken('token-name')->plainTextToken;
 
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
@@ -163,7 +163,7 @@ class UsersController extends Controller
 
         //Токен юзера
         $user = auth()->user();
-        $token = session('user_token');
+        $token = $user->createToken('token-name')->plainTextToken;
 
         $serviceResponse = $usersService->getUsersByField($request);
         $serviceResponse = $serviceResponse['data'];
