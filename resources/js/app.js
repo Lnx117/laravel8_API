@@ -2,11 +2,14 @@
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
- */
+*/
 
 require('./bootstrap');
 
 window.Vue = require('vue').default;
+
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate);
 
 /**
  * The following block of code may be used to automatically register your
@@ -54,3 +57,4 @@ const app = new Vue({
         ManagersDeletedComponent,
     },
 });
+
