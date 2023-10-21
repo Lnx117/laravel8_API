@@ -5046,6 +5046,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data'],
   components: {},
@@ -5922,6 +5923,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data'],
   components: {},
@@ -5936,12 +5939,39 @@ __webpack_require__.r(__webpack_exports__);
       showPopUp: false
     };
   },
+  validations: {
+    email: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.required,
+      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.email,
+      maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.maxLength)(255)
+    },
+    password: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.required,
+      minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.minLength)(8),
+      string: function string(value) {
+        return /^[A-Za-zА-Яа-я0-9]+$/.test(value);
+      } // Проверка на строку с буквами и цифрами
+    },
+
+    customerFirstName: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.required,
+      minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__.minLength)(3),
+      string: function string(value) {
+        return /^[A-Za-zА-Яа-я]+$/.test(value);
+      } // Проверка на строку с буквами и пробелами
+    }
+  },
   mounted: function mounted() {},
   watch: {},
   methods: {
     createUser: function createUser() {
       var _this = this;
       this.showLoader = true;
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.showLoader = false;
+        return;
+      }
       var userData = {
         "name": this.customerFirstName,
         "email": this.email,
@@ -7622,6 +7652,9 @@ var render = function render() {
       expression: "customerFirstName"
     }],
     staticClass: "form-control",
+    "class": {
+      vueErrorInput: !_vm.$v.customerFirstName.required || !_vm.$v.customerFirstName.minLength
+    },
     attrs: {
       id: "customerFirstName",
       placeholder: "Имя",
@@ -7631,12 +7664,19 @@ var render = function render() {
       value: _vm.customerFirstName
     },
     on: {
+      blur: function blur($event) {
+        return _vm.$v.customerFirstName.$touch();
+      },
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.customerFirstName = $event.target.value;
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  }), _vm._v(" "), _vm.$v.customerFirstName.$error ? _c("span", {
+    staticStyle: {
+      color: "red"
+    }
+  }, [_vm._v("\n                                    Поле обязательно, должно содержать не менее 3 символов и состоять из букв.\n                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-md-4"
   }, [_c("label", {
     attrs: {
@@ -7678,6 +7718,9 @@ var render = function render() {
       expression: "password"
     }],
     staticClass: "form-control",
+    "class": {
+      vueErrorInput: !_vm.$v.password.required || !_vm.$v.password.minLength
+    },
     attrs: {
       type: "password",
       id: "phone",
@@ -7688,12 +7731,19 @@ var render = function render() {
       value: _vm.password
     },
     on: {
+      blur: function blur($event) {
+        return _vm.$v.password.$touch();
+      },
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.password = $event.target.value;
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  }), _vm._v(" "), _vm.$v.password.$error ? _c("span", {
+    staticStyle: {
+      color: "red"
+    }
+  }, [_vm._v("\n                                    Поле обязательно и может содержать русские и английские буквы и цифры и должно быть не менее 8 символов\n                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "custom_row my_row col-md-4"
   }, [_c("label", {
     attrs: {
@@ -7707,6 +7757,9 @@ var render = function render() {
       expression: "email"
     }],
     staticClass: "form-control",
+    "class": {
+      vueErrorInput: !_vm.$v.email.required || !_vm.$v.email.email
+    },
     attrs: {
       id: "city",
       placeholder: "Email",
@@ -7716,12 +7769,19 @@ var render = function render() {
       value: _vm.email
     },
     on: {
+      blur: function blur($event) {
+        return _vm.$v.email.$touch();
+      },
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.email = $event.target.value;
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  }), _vm._v(" "), _vm.$v.email.$error ? _c("span", {
+    staticStyle: {
+      color: "red"
+    }
+  }, [_vm._v('\n                                    Поле обязательно и должно быть в виде "aaaaa@example.com"\n                                ')]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "button",
     on: {
       click: _vm.createUser
@@ -7935,7 +7995,7 @@ var render = function render() {
     staticStyle: {
       color: "red"
     }
-  }, [_vm._v("\n                                Поле может содержать русские и английские буквы и цифры и должно быть не менее 8 символов\n                            ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                Поле обязательно и может содержать русские и английские буквы и цифры и должно быть не менее 8 символов\n                            ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "custom_row my_row col-md-4"
   }, [_c("label", {
     attrs: {

@@ -104,6 +104,7 @@
 </template>
 
 <script>
+    import { required, email, maxLength, minLength } from 'vuelidate/lib/validators';
     export default {
         props: ['data'],
         components: {
