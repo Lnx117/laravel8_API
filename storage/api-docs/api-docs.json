@@ -339,9 +339,6 @@
                 "responses": {
                     "200": {
                         "description": "App deleted successfully"
-                    },
-                    "404": {
-                        "description": "App not found"
                     }
                 },
                 "security": [
@@ -449,9 +446,6 @@
                 "responses": {
                     "200": {
                         "description": "Task created successfully"
-                    },
-                    "404": {
-                        "description": "Task not created"
                     }
                 },
                 "security": [

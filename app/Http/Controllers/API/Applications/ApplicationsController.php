@@ -362,10 +362,6 @@ class ApplicationsController extends Controller
      *          response=200,
      *          description="App deleted successfully"
      *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="App not found"
-     *      )
      * )
      */
     public function deleteApplicationById($id)
@@ -485,10 +481,6 @@ class ApplicationsController extends Controller
      *          response=200,
      *          description="Task created successfully"
      *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Task not created"
-     *      )
      * )
      */
     public function createApplication(Request $request)
