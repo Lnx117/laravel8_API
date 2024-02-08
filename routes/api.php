@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum','checkAdminOrManagerRole'])->prefix('sanctum')
     Route::get('getApplicationById/{id}', [ApplicationsController::class, 'getApplicationById']);
     Route::delete('deleteApplicationById/{id}', [ApplicationsController::class, 'deleteApplicationById']);
 });
+Route::post('createApplication', [ApplicationsController::class, 'createApplication']);
 
 // // Route to reset password
 // Route::post('reset-password', function (Request $request) {

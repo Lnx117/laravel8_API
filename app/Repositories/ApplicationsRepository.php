@@ -8,7 +8,7 @@ class ApplicationsRepository implements ApplicationsRepositoryInterface
 {
     public function getAllApplications(): array
     {
-        return Applications::all()->toArray();
+        return Applications::orderBy('id', 'desc')->get()->toArray();
     }
     
     public function getById(int $id): ?Applications
@@ -38,7 +38,7 @@ class ApplicationsRepository implements ApplicationsRepositoryInterface
         $query = Applications::query();
 
         foreach ($fields as $field => $value) {
-            $query->where($field, $value);
+            $query->where($field, $value)->orderBy('id', 'desc');;
         }
 
         return $query->get()->toArray();

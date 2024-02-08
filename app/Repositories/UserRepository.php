@@ -8,7 +8,7 @@ class UserRepository implements UserRepositoryInterface
 {
     public function getAllUsers(): array
     {
-        return User::all()->toArray();
+        return User::orderBy('id', 'desc')->get()->toArray();
     }
     
     public function getById(int $id): ?User
@@ -48,7 +48,7 @@ class UserRepository implements UserRepositoryInterface
         $query = User::query();
 
         foreach ($fields as $field => $value) {
-            $query->where($field, $value);
+            $query->where($field, $value)->orderBy('id', 'desc');
         }
 
         return $query->get()->toArray();
